@@ -32,5 +32,12 @@ def power(num1, num2): #num1 ^ num2
         else: return (temp * temp) / num1 
 	
 
+def printGP(a, r, n):  
+	gp=[]
+	for i in range(0, n):
+		curr_term = a * pow(r, i)
+		gp.append(curr_term)
+		print(curr_term, end =" ")
+	return gp
 
 
