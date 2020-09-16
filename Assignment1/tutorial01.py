@@ -20,3 +20,17 @@ def divide(num1, num2):
 	division=num1/num2 
 	return division
 	
+def power(num1, num2): #num1 ^ num2
+	#PowerLogic 
+    if(num2 == 0): return 1
+    temp = power(num1, int(num2 / 2))  
+      
+    if (num2 % 2 == 0): 
+        return temp * temp 
+    else: 
+        if(num2 > 0): return num1 * temp * temp 
+        else: return (temp * temp) / num1 
+	
+
+
+
