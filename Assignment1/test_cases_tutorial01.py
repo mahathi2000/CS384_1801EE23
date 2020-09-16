@@ -1,6 +1,6 @@
 import tutorial01 as A1
 
-actual_answers = [9, 12, 80, 5, 8, [2, 6, 18, 54, 162]]
+actual_answers = [9, 12, 80, 5, 8, [2, 6, 18, 54, 162], [2, 3, 4, 5, 6]]
 student_answers = []
 
 test_case_1 = A1.add(4, 5)
@@ -27,6 +27,17 @@ gp = list(gp)
 student_answers.append(gp)
 
 print(gp)
+
+# Driver code 
+a = 2    # starting number 
+d = 1    # Common difference 
+n = 5    # N th term to be find 
+  
+ap=A1.printAP(a, d, n)
+ap=list(ap)
+student_answers.append(ap)
+print(ap) 
+
 
 
 print(actual_answers)

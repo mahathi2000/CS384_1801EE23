@@ -40,4 +40,15 @@ def printGP(a, r, n):
 		print(curr_term, end =" ")
 	return gp
 
+def printAP(a, d, n): 
+	ap=[]
+	# Printing AP by simply adding d 
+	# to previous term. 
+	curr_term=a 
+  
+	for i in range(1,n+1):
+		ap.append(curr_term) 
+		print(curr_term, end=' ') 
+		curr_term =curr_term + d 
+	return ap
 
