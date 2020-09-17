@@ -52,3 +52,20 @@ def printAP(a, d, n):
 		curr_term =curr_term + d 
 	return ap
 
+def printHP(a, d, n): 
+	hp=[]
+	curr_term=a 
+  
+	for i in range(1,n+1):
+		if(curr_term==0):
+			return 0
+		temp=1/curr_term
+		hp.append(round(temp, 3)) 
+		print(round(temp, 3), end=' ') 
+		curr_term =curr_term + d 
+	return hp
+
+
+
+
+
