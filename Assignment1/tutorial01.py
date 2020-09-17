@@ -37,18 +37,19 @@ def divide(num1, num2):
 
 def power(num1, num2): #num1 ^ num2
 	#PowerLogic
-	if(isinstance(num1,(int, float)) and isinstance(num2,(int, float))): 
-		if(num2 == 0):
-			return 1
-		temp = power(num1, int(num2 / 2))  
-      
-		if (num2 % 2 == 0): 
-			return roun(temp * temp, 3) 
-		else: 
-			if(num2 > 0): return round(num1 * temp * temp, 3) 
-			else: return round((temp * temp) / num1, 3)
-	else:
- 		return 0 
+		p = 1
+		if num2<0:
+			num1 = 1/num1
+			num2 = abs(num2)
+
+        # Exponentiation by Squaring
+
+		while num2:
+			if num2%2:
+				p*= num1
+			num1*=num1
+			num2//=2
+		return round(p, 3)
 	
 
 def printGP(a, r, n):
