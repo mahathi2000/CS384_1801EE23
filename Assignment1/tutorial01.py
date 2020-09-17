@@ -43,10 +43,10 @@ def power(num1, num2): #num1 ^ num2
 		temp = power(num1, int(num2 / 2))  
       
 		if (num2 % 2 == 0): 
-			return temp * temp 
+			return roun(temp * temp, 3) 
 		else: 
-			if(num2 > 0): return num1 * temp * temp 
-			else: return (temp * temp) / num1
+			if(num2 > 0): return round(num1 * temp * temp, 3) 
+			else: return round((temp * temp) / num1, 3)
 	else:
  		return 0 
 	
