@@ -1,12 +1,12 @@
 import tutorial01 as A1
 
-actual_answers = [9, 12, 80, 5, 8, [2, 6, 18, 54, 162], [2, 3, 4, 5, 6], [0.500, 0.333, 0.250, 0.200, 0.167]]
+actual_answers = [9, 9, 80, 5, 8, [2, 6, 18, 54, 162], [2, 3, 4, 5, 6], [0.500, 0.333, 0.250, 0.200, 0.167]]
 student_answers = []
 
 test_case_1 = A1.add(4, 5)
 student_answers.append(test_case_1)
 
-test_case_2 = A1.subtract(14, 2)
+test_case_2 = A1.subtract(14, 5)
 student_answers.append(test_case_2)
 
 test_case_3 = A1.multiply(10, 8)
@@ -15,7 +15,7 @@ student_answers.append(test_case_3)
 test_case_4 = A1.divide(10, 2)
 student_answers.append(test_case_4)
 
-test_case_5=A1.power(2,3)
+test_case_5=A1.power(2, 3)
 student_answers.append(test_case_5)
 
 a = 2 # starting number 
