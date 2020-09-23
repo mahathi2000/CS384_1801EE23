@@ -10,8 +10,8 @@ def mean(first_list):
     return round(mean_value, 6)
 
 
- Function to compute median. You cant use Python functions
- def median(first_list):
+# Function to compute median. You cant use Python functions
+def median(first_list):
    # median Logic
     sorted_list = sorting(first_list)
     for i in first_list:
@@ -28,14 +28,14 @@ def mean(first_list):
 
 
 # Function to compute Standard deviation. You cant use Python functions
-# def standard_deviation(first_list):
-#    # Standard deviation Logic
-#    standard_deviation_value = math.sqrt(variance(first_list))
-#    return round(standard_deviation_value, 6)
+def standard_deviation(first_list):
+    # Standard deviation Logic
+    standard_deviation_value = math.sqrt(variance(first_list))
+    return round(standard_deviation_value, 6)
 
 
 # Function to compute variance. You cant use Python functions
- def variance(first_list):
+def variance(first_list):
     # variance Logic
     n = len(first_list)
     avg_val = mean(first_list)
@@ -154,14 +154,14 @@ def sorting(first_list):
 
     # Traverse through all array elements
     for i in range(n-1):
-    # range(n) also work but outer loop will repeat one time more than needed.
+        # range(n) also work but outer loop will repeat one time more than needed.
 
-    # Last i elements are already in place
+        # Last i elements are already in place
         for j in range(0, n-i-1):
 
-    # traverse the array from 0 to n-i-1
-    # Swap if the element found is greater
-    # than the next element
+            # traverse the array from 0 to n-i-1
+            # Swap if the element found is greater
+            # than the next element
             if sorted_list[j] > sorted_list[j+1]:
                 sorted_list[j], sorted_list[j +
                                             1] = sorted_list[j+1], sorted_list[j]
