@@ -77,7 +77,6 @@ def summation(first_list):
     summation_value = 0
     for i in first_list:
         if isinstance(first_list[i], (int, float)) == False:
-            print('running this part')
             return 0
         else:
             summation_value = summation_value + first_list[i]
