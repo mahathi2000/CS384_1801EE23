@@ -170,18 +170,18 @@ def sorting(first_list):
 
 
 # Function to compute Kurtosis. You cant use Python functions
-# def kurtosis(first_list):
+def kurtosis(first_list):
     # Kurtosis Logic
-#    x_mean = mean(first_list)
-#    sd = standard_deviation(first_list)
-#    a = []
-#    for i in range(len(first_list)):
-#        if (isinstance(i, (int, float)) == False):
-#            return 0
-#        a.append(((first_list[i]-x_mean)/sd)**4)
-#    kurtosis_value = (summation(a)/len(first_list))
+    x_mean = mean(first_list)
+    sd = standard_deviation(first_list)
+    a = []
+    for i in range(len(first_list)):
+        if (isinstance(i, (int, float)) == False):
+            return 0
+        a.append(((first_list[i]-x_mean)/sd)**4)
+    kurtosis_value = (summation(a)/len(first_list))
 
-#    return round(kurtosis_value, 6)
+    return round(kurtosis_value, 6)
 
 
 # Function to compute sum. You cant use Python functions
