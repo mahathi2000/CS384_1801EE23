@@ -133,18 +133,18 @@ def variance(first_list):
 
 
 # Function to compute Skewness. You cant use Python functions
-# def skewness(first_list):
-#    # Skewness Logic
-#    x_mean = mean(first_list)
-#    sd = standard_deviation(first_list)
-#    a = []
-#    for i in range(len(first_list)):
-#        if (isinstance(i, (int, float)) == False):
-#            return 0
-#        a.append(((first_list[i]-x_mean)/sd) *
-#                 ((first_list[i]-x_mean)/sd)*((first_list[i]-x_mean)/sd))
-#    skewness_value = (summation(a)/len(first_list))
-#    return round(skewness_value, 6)
+def skewness(first_list):
+    #    # Skewness Logic
+    x_mean = mean(first_list)
+    sd = standard_deviation(first_list)
+    a = []
+    for i in range(len(first_list)):
+        if (isinstance(i, (int, float)) == False):
+            return 0
+        a.append(((first_list[i]-x_mean)/sd) *
+                 ((first_list[i]-x_mean)/sd)*((first_list[i]-x_mean)/sd))
+    skewness_value = (summation(a)/len(first_list))
+    return round(skewness_value, 6)
 
 
 def sorting(first_list):
