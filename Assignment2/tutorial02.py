@@ -35,18 +35,18 @@ def mean(first_list):
 
 
 # Function to compute variance. You cant use Python functions
-# def variance(first_list):
+ def variance(first_list):
     # variance Logic
-#    n = len(first_list)
-#    avg_val = mean(first_list)
-#    a = []
-#    for i in range(n):
-#        if (isinstance(i, (int, float)) == False):
-#            return 0
-#        a.append((first_list[i]-avg_val)*(first_list[i]-avg_val))
-#    variance_value = summation(a)/n
+    n = len(first_list)
+    avg_val = mean(first_list)
+    a = []
+    for i in range(n):
+        if (isinstance(i, (int, float)) == False):
+            return 0
+        a.append((first_list[i]-avg_val)*(first_list[i]-avg_val))
+    variance_value = summation(a)/n
 
-#    return round(variance_value, 6)
+    return round(variance_value, 6)
 
 
 # Function to compute RMSE. You cant use Python functions
