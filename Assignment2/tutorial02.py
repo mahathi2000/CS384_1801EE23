@@ -100,18 +100,18 @@ def mae(first_list, second_list):
 
 
 # Function to compute NSE. You cant use Python functions
-# def nse(first_list, second_list):
+def nse(first_list, second_list):
     # nse Logic
-#    num = []
-#    den = []
-#    x_mean = mean(first_list)
-#    for i, j in zip(first_list, second_list):
-#        if (isinstance(i, (int, float)) == False or isinstance(j, (int, float)) == False):
-#            return 0
-#        num.append((i-j)**2)
-#        den.append((i-x_mean)**2)
-#    nse_value = 1-(summation(num)/summation(den))
-#    return round(nse_value, 6)
+    num = []
+    den = []
+    x_mean = mean(first_list)
+    for i, j in zip(first_list, second_list):
+        if (isinstance(i, (int, float)) == False or isinstance(j, (int, float)) == False):
+            return 0
+        num.append((i-j)**2)
+        den.append((i-x_mean)**2)
+    nse_value = 1-(summation(num)/summation(den))
+    return round(nse_value, 6)
 
 
 # Function to compute Pearson correlation coefficient. You cant use Python functions
