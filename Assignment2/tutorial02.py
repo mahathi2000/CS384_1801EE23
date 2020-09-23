@@ -50,10 +50,10 @@ def variance(first_list):
 
 
 # Function to compute RMSE. You cant use Python functions
-# def rmse(first_list, second_list):
+def rmse(first_list, second_list):
     # RMSE Logic
-#    rmse_value = math.sqrt(mse(first_list, second_list))
-#    return round(rmse_value, 6)
+    rmse_value = math.sqrt(mse(first_list, second_list))
+    return round(rmse_value, 6)
 
 
 # Function to compute mse. You cant use Python functions
