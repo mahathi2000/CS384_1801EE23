@@ -78,25 +78,25 @@ def mse(first_list, second_list):
 
 
 # Function to compute mae. You cant use Python functions
-# def mae(first_list, second_list):
+def mae(first_list, second_list):
     # mae Logic
-#    if (len(first_list) != len(second_list)):
-#        return 0
+    if (len(first_list) != len(second_list)):
+        return 0
 
-#    for i, j in zip(first_list, second_list):
-#        if (isinstance(i, (int, float)) == False or isinstance(j, (int, float)) == False):
-#            return 0
+    for i, j in zip(first_list, second_list):
+        if (isinstance(i, (int, float)) == False or isinstance(j, (int, float)) == False):
+            return 0
 
-#    new_list = []
+    new_list = []
 
-#    for i, j in zip(first_list, second_list):
-#        new_list.append(abs(i - j))
+    for i, j in zip(first_list, second_list):
+        new_list.append(abs(i - j))
 
-#    mae_val = summation(new_list) / len(first_list)
+    mae_val = summation(new_list) / len(first_list)
 
-#    mae_value = round(mae_val, 6)
+    mae_value = round(mae_val, 6)
 
-#    return mae_value
+    return mae_value
 
 
 # Function to compute NSE. You cant use Python functions
