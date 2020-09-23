@@ -57,24 +57,24 @@ def variance(first_list):
 
 
 # Function to compute mse. You cant use Python functions
-# def mse(first_list, second_list):
+def mse(first_list, second_list):
     # mse Logic
-#    if (len(first_list) != len(second_list)):
-#        return 0
+    if (len(first_list) != len(second_list)):
+        return 0
 
-#    for i, j in zip(first_list, second_list):
-#        if (isinstance(i, (int, float)) == False or isinstance(j, (int, float)) == False):
-#            return 0
+    for i, j in zip(first_list, second_list):
+        if (isinstance(i, (int, float)) == False or isinstance(j, (int, float)) == False):
+            return 0
 
-#    new_list = []
+    new_list = []
 
-#    for i, j in zip(first_list, second_list):
-#        new_list.append((i - j)*(i-j))
-#
-#    mse_val = summation(new_list) / len(first_list)
+    for i, j in zip(first_list, second_list):
+        new_list.append((i - j)*(i-j))
 
-#    mse_value = round(mse_val, 6)
-#    return mse_value
+    mse_val = summation(new_list) / len(first_list)
+
+    mse_value = round(mse_val, 6)
+    return mse_value
 
 
 # Function to compute mae. You cant use Python functions
