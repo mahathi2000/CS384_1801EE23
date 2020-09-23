@@ -10,21 +10,21 @@ def mean(first_list):
     return round(mean_value, 6)
 
 
-# Function to compute median. You cant use Python functions
-# def median(first_list):
-#   # median Logic
-#    sorted_list = sorting(first_list)
-#    for i in first_list:
-#        if (isinstance(i, (int, float)) == False):
-#            return 0
-#    n = len(sorted_list)
-#    if n % 2 == 0:
-#        median1 = sorted_list[n//2]
-#        median2 = sorted_list[n//2 - 1]
-#        median_value = (median1 + median2)/2
-#    else:
-#        median_value = sorted_list[n//2]
-#    return round(median_value, 6)
+ Function to compute median. You cant use Python functions
+ def median(first_list):
+   # median Logic
+    sorted_list = sorting(first_list)
+    for i in first_list:
+        if (isinstance(i, (int, float)) == False):
+            return 0
+    n = len(sorted_list)
+    if n % 2 == 0:
+        median1 = sorted_list[n//2]
+        median2 = sorted_list[n//2 - 1]
+        median_value = (median1 + median2)/2
+    else:
+        median_value = sorted_list[n//2]
+    return round(median_value, 6)
 
 
 # Function to compute Standard deviation. You cant use Python functions
@@ -147,26 +147,26 @@ def mean(first_list):
 #    return round(skewness_value, 6)
 
 
-# def sorting(first_list):
+def sorting(first_list):
     # Sorting Logic
-#    sorted_list = first_list
-#    n = len(sorted_list)
+    sorted_list = first_list
+    n = len(sorted_list)
 
     # Traverse through all array elements
-#    for i in range(n-1):
+    for i in range(n-1):
     # range(n) also work but outer loop will repeat one time more than needed.
 
     # Last i elements are already in place
-#        for j in range(0, n-i-1):
+        for j in range(0, n-i-1):
 
     # traverse the array from 0 to n-i-1
     # Swap if the element found is greater
     # than the next element
-#            if sorted_list[j] > sorted_list[j+1]:
-#                sorted_list[j], sorted_list[j +
-#                                            1] = sorted_list[j+1], sorted_list[j]
+            if sorted_list[j] > sorted_list[j+1]:
+                sorted_list[j], sorted_list[j +
+                                            1] = sorted_list[j+1], sorted_list[j]
 
-#    return sorted_list
+    return sorted_list
 
 
 # Function to compute Kurtosis. You cant use Python functions
