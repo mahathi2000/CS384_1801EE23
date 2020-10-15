@@ -237,6 +237,23 @@ def new_file():
 
 # Create the new file here and also sort it in this function only.
 def new_file_sort():
+    new_file()
+    splited_file_path=os.getcwd() + '/analytics/'+'studentinfo_cs384_names_split.csv'
+    file_name='studentinfo_cs384_names_split_sorted_first_name.csv'
+    path=os.getcwd() + '/analytics'
+    os.makedirs(path,exist_ok=True)
+    
+    with open(splited_file_path,newline='') as file:
+        reader = csv.reader(file, delimiter=",")
+        next(reader)
+        sortedlist = sorted(reader, key=operator.itemgetter(1), reverse=False)
+
+    with open(path+'/'+'studentinfo_cs384_names_split_sorted_first_name.csv', 'a',newline='') as file:
+        writer = csv.writer(file)
+        header_row = ['id','first_name','last_name','country','email','gender','dob','blood_group','state']
+        writer.writerow(header_row)
+        for row in sortedlist:
+            writer.writerow(row)
 
     pass
 
