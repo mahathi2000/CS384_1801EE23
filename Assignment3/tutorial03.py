@@ -1,15 +1,16 @@
 import csv, os, operator, shutil
 
+cwd=os.getcwd()
+path=cwd+'/analytics'
+if os.path.exists(path):
+    shutil.rmtree(path)
 
 
 
 
 def course():
     headers = ['id','full_name','country','email','gender','dob','blood_group','state']
-    cwd=os.getcwd()
-    path=cwd+'/analytics'
-    if os.path.exists(path):
-        shutil.rmtree(path)
+    
     # Read csv and process
     current_dir = os.getcwd()
     #print(current_dir)
@@ -55,10 +56,7 @@ def course():
 
 def country():
     headers = ['id','full_name','country','email','gender','dob','blood_group','state']
-    cwd=os.getcwd()
-    path=cwd+'/analytics'
-    if os.path.exists(path):
-        shutil.rmtree(path)
+    
     # Read csv and process
     with open('studentinfo_cs384.csv','r') as file:
         reader = csv.reader(file, delimiter=',')
@@ -82,6 +80,33 @@ def country():
 
 
 def email_domain_extract():
+    headers = ['id','full_name','country','email','gender','dob','blood_group','state']
+
+    # Read csv and process
+    with open('studentinfo_cs384.csv','r') as file:
+        reader = csv.reader(file, delimiter=',')
+        next(reader)
+        for row in reader:
+            email=row[3]
+            path=os.getcwd()+'/analytics/email_domain'
+            os.makedirs(path,exist_ok=True)
+            t=0
+            str=''
+            for i in email:
+                if i=='@':
+                    t=1
+                elif t==1 and i=='.':
+                    break
+                elif t==1:
+                    str=str+i
+            file_name=str+'.csv'
+            with open(path +'/'+ file_name, 'a', newline='') as file:
+                writer = csv.writer(file)
+                file_is_empty = os.stat(path +'/'+ file_name).st_size == 0
+                if file_is_empty:
+                    writer.writerow(headers)
+                    if len(row[0]) == 8:
+                        writer.writerow(row)
 
     pass
 
@@ -116,3 +141,5 @@ def new_file():
 def new_file_sort():
 
     pass
+
+
