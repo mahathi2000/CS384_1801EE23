@@ -212,6 +212,25 @@ def blood_group():
 
 
 def new_file():
+    file_name='studentinfo_cs384_names_split.csv'
+    path=os.getcwd() + '/analytics'
+    os.makedirs(path,exist_ok=True)
+    new_headers=['id','first_name','last_name','country','email','gender','dob','blood_group','state']
+
+    with open('studentinfo_cs384.csv','r') as file:
+        reader = csv.reader(file, delimiter=',')
+        next(reader)
+        for row in reader:
+            first_and_last_list=row[1].split(' ', 2)
+            with open(path+'/'+file_name,'a',newline='') as file:
+                writer=csv.writer(file)
+                file_is_empty = os.stat(path +'/'+ file_name).st_size == 0
+                if file_is_empty:
+                    writer.writerow(new_headers)
+
+                if len(row[0]) == 8:
+                    new_row = [row[0],*first_and_last_list, *row[2:]] 
+                    writer.writerow(new_row)
 
     pass
 
@@ -220,5 +239,4 @@ def new_file():
 def new_file_sort():
 
     pass
-
 
