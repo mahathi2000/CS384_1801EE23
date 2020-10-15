@@ -1,11 +1,27 @@
 import csv, os, operator, shutil
 
-cwd=os.getcwd()
-path=cwd+'/analytics'
-if os.path.exists(path):
-    shutil.rmtree(path)
 
 
+def del_create_analytics_folder():
+    # del the analytics folder including subfolder
+    # mkdir the analytics folder (only mkdir)
+    cwd=os.getcwd()
+    path=cwd+'/analytics'
+    if os.path.exists(path):
+        shutil.rmtree(path)
+
+    directory = "analytics"
+    # Parent Directory path 
+    parent_dir = os.getcwd()
+    
+    # Path 
+    path = os.path.join(parent_dir, directory) 
+    
+    # Create the directory 
+    # 'GeeksForGeeks' in 
+    # '/home / User / Documents' 
+    os.mkdir(path) 
+    pass
 
 
 def course():
@@ -256,4 +272,6 @@ def new_file_sort():
             writer.writerow(row)
 
     pass
+
+
 
