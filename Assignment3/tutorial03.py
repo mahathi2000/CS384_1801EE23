@@ -135,6 +135,33 @@ def gender():
 
 
 def dob():
+    headers = ['id','full_name','country','email','gender','dob','blood_group','state']
+    # Read csv and process
+    with open('studentinfo_cs384.csv','r') as file:
+        reader = csv.reader(file, delimiter=',')
+        next(reader)
+        for row in reader:
+            birthday=row[5]
+            year=int(birthday[-4:])
+            path=os.getcwd() + '/analytics/dob/'
+            os.makedirs(path,exist_ok=True)
+            if 1995<=year<=1999:
+                file_name='bday_1995_1999.csv'
+            if 2000<=year<=2004:
+                file_name='bday_2000_2004.csv'
+            if 2005<=year<=2009:
+                file_name='bday_2005_2009.csv'
+            if 2010<=year<=2014:
+                file_name='bday_2010_2014.csv'
+            if 2015<=year<=2020:
+                file_name='bday_2015_2020.csv'
+            with open(path +'/'+ file_name, 'a', newline='') as file:
+                writer = csv.writer(file)
+                file_is_empty = os.stat(path +'/'+ file_name).st_size == 0
+                if file_is_empty:
+                    writer.writerow(headers)
+                if len(row[0]) == 8:
+                    writer.writerow(row)    
 
     pass
 
