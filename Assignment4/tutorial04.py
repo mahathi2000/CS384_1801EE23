@@ -123,7 +123,7 @@ def make_overall():
                 sem_cleared = sum(np.multiply(c,credits_cleared))
 
                 cum_cleared += sem_cleared
-                row=[sem,total_credits,sem_cleared,spi,cpi_denominator,cum_cleared,cpi]
+                row=[sem,total_credits,sem_cleared,round(spi,2),cpi_denominator,cum_cleared,round(cpi,2)]
                 overall_len=len(df_overall)             
                 df_overall.loc[overall_len] = row
 
