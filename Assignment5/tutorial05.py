@@ -95,8 +95,54 @@ def rename_Game_of_Thrones(folder_name):
     
 
 def rename_Sherlock(folder_name):
-    season_padding=input()
-    episode_padding=input()
+    print("Enter season padding:")
+    season_padding = input()
+    print("Enter episode padding:")
+    episode_padding = input()
+    folder_path = os.path.join(path, folder_name)
+    for filename in os.listdir(folder_path):
+        # season=get_season(filename)
+        print(filename)
+        matches = re.findall(r"S[0-9][0-9]", filename)
+        if len(matches) == 1:
+            season = int(matches[0][1:])
+            new_season = str(season)
+            new_season = new_season.zfill(int(season_padding))
+            # print(new_season)
+            # print(type(season))
+
+        # # ep=get_ep(filename)
+        matches = re.findall(r"E[0-9][0-9]", filename)
+
+        if len(matches) == 1:
+            episode = matches[0][1:]
+            #episode = stripEp(episode)
+            episode = int(episode)
+            new_ep = str(episode)
+            new_ep = new_ep.zfill(int(episode_padding))
+            #print(new_ep)
+
+        
+
+        rename = folder_name+' - Season ' + str(new_season)+' Episode '+str(new_ep)
+        last = filename[-3:]
+        # print('last:',last)
+        if(last == 'srt'):
+            rename = rename+'.srt'
+        if(last == 'mp4'):
+            rename = rename+'.mp4'
+
+        os.chdir(folder_path)
+
+        source_path=folder_path+filename
+        destination_path=folder_path+rename
+        #print(source_path)
+        #print(destination_path)
+        os.rename(filename, rename)
+        print(rename)
+        
+    
+
 
     # rename Logic 
     pass
@@ -115,7 +161,7 @@ def rename_How_I_Met_Your_Mother(folder_name):
     # rename Logic 
     pass
     
-#print("Enter Show name:")
+print("Enter Show name:")
 show_name=input()
 
 if(show_name=='FIR'):
