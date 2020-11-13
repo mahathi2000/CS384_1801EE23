@@ -234,8 +234,11 @@ def rename_Suits(folder_name):
         destination_path=folder_path+rename
         # print(source_path)
         # print(destination_path)
-        os.rename(filename, rename)
-        print(rename)
+        try:
+            os.rename(filename, rename)
+            print(rename)
+        except:
+            os.remove(filename)
 
     pass
 
