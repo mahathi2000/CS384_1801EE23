@@ -41,17 +41,17 @@ def rename_FIR(folder_name):
             episode = int(episode)
             new_ep = str(episode)
             new_ep = new_ep.zfill(int(episode_padding))
-            #print(new_ep)
+            
 
         #ep_name=get_ep_name(filename)
-        match_name=re.findall(r"[a-zA-Z0-9\.\-\'\!\&\(\) ]+\.",filename)[0]
-        name=re.split(r"\.\w",match_name)[0]
-        #print(name)
-        ep_name=name.split("-",2)[-1]
-        #print(ep_name)
+        # match_name=re.findall(r"[a-zA-Z0-9\.\-\'\!\&\(\) ]+\.",filename)[0]
+        # name=re.split(r"\.\w",match_name)[0]
+        # #print(name)
+        # ep_name=name.split("-",2)[-1]
+        # #print(ep_name)
         
 
-        rename = folder_name+' - ' +'Episode '+str(new_ep)+' -'+ep_name
+        rename = folder_name+' - ' +'Episode '+str(new_ep)
 
         last = filename[-3:]
         if(last == 'srt'):
@@ -61,11 +61,14 @@ def rename_FIR(folder_name):
 
         os.chdir(folder_path)
 
-        source_path=folder_path+filename
-        destination_path=folder_path+rename
-        # print(source_path)
-        # print(destination_path)
-        #os.rename(filename, rename)
+        # source_path=folder_path+filename
+        # destination_path=folder_path+rename
+        # # print(source_path)
+        # # print(destination_path)
+        try:
+            os.rename(filename, rename)
+        except:
+            os.remove(filename)
         print(rename)
 
     # rename Logic 
