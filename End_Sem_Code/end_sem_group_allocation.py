@@ -10,6 +10,47 @@ import hashlib
 
 os.system("cls")
 
+def make_individual_branch(filename):
+    path=os.getcwd()
+    all_rolls=pd.read_csv(filename)
+    branch_code=[]
+    with open(filename,'r') as file:
+        reader = csv.reader(file, delimiter=',')
+        next(reader)
+        for row in reader:
+            roll=row[0]
+            branch=roll[4:6]
+            branch_code.append(branch)
+        
+        all_rolls['BRANCH_CODE']=branch_code
+
+        #print(all_rolls)
+    df=all_rolls
+    branch_grouped= df.groupby('BRANCH_CODE')
+    for branch,group in branch_grouped:
+        branch_csv_name=branch+'.csv'
+
+
+        branch_df=pd.DataFrame(columns=['Roll','Name','Email'])
+        
+        branch_df['Roll']=group['Roll']
+        branch_df['Name']=group['Name']
+        branch_df['Email']=group['Email']
+
+        file_path=os.path.join(path,branch_csv_name)
+        branch_df.to_csv(file_path,header=True,index=False)
+
+        
+
+        
+
+
+    pass
+
+
+
+
+
 def make_branch_strength(filename):
     all_rolls=pd.read_csv(filename)
     branch_code=[]
@@ -25,6 +66,7 @@ def make_branch_strength(filename):
 
         #print(all_rolls)
     df=all_rolls
+
     new_df=df.groupby(['BRANCH_CODE']).size()
     file_name='branch_strength.csv'
     path=os.getcwd()
@@ -83,7 +125,8 @@ def group_allocation(filename, number_of_groups):
     batch_strength= len(list(reader))-1
     print(batch_strength)
 
-    make_branch_strength(filename)
+    #make_branch_strength(filename)
+    make_individual_branch(filename)
 
 
 
