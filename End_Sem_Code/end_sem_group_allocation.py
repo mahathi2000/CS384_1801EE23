@@ -10,6 +10,89 @@ import hashlib
 
 os.system("cls")
 
+def make_groups(filename,number_of_groups,batch_strength):
+
+    headers=['Roll','Name','Email']
+    
+    directory = "groups"
+    # Parent Directory path
+    parent_dir = os.getcwd()
+
+    # Path
+    path = os.path.join(parent_dir, directory)
+    if os.path.exists(path):
+        shutil.rmtree(path)
+    os.mkdir(path)
+
+    #creating empty group files
+    # for i in range(int(number_of_groups)):
+    #     group_number=i+1
+    #     padded_group= str(group_number).zfill(2)
+    #     group_file_name='Group_G'+padded_group
+    #     with open(path +'/'+ group_file_name, 'a', newline='') as file:
+    #             writer = csv.writer(file)
+    #             writer.writerow(headers)
+
+    with open('branch_strength.csv','r') as file:
+        reader=csv.reader(file,delimiter=',')
+        next(reader)
+
+        for row in reader:
+            #print(row)
+            branch_strength=int(row[1])
+            #print(branch_strength)
+            branch_code=row[0]
+            #print(branch_code)
+            csv_name=branch_code+'.csv'
+            df=pd.read_csv(csv_name)
+            #print(df)
+            x=math.floor(int(branch_strength)/int(number_of_groups))
+            start=0
+            end=start+x
+            
+            
+            
+            for i in range(number_of_groups):
+                group_num=i+1
+                padded_group= str(group_num).zfill(2)
+                group_file_name='Group_G'+padded_group+'.csv'
+                #print(group_file_name)
+                with open(path+'/'+group_file_name,'a',newline='') as file:
+                    for j in range(start,end):
+                        writer=csv.writer(file)
+                        
+                        row=list(df.iloc[j])
+                        #print(row)
+                        writer.writerow(row)
+                    
+                        
+                start=end
+                end=start+x
+                padded_group= str(group_num).zfill(2)
+                        
+                        
+
+
+
+            
+
+            # with open(csv_name,'r') as file: 
+            #     reader = csv.reader(file, delimiter=',')
+            #     next(reader)
+            #     for row in reader:
+
+            #     for i in range[start:end]:
+            #         with open(path +'/'+ csv_name, 'a', newline='') as file:
+            #         writer = csv.writer(file)
+            #         writer.writerow(row)
+                
+
+    
+
+
+
+    pass
+
 def make_individual_branch(filename):
     path=os.getcwd()
     all_rolls=pd.read_csv(filename)
@@ -126,7 +209,9 @@ def group_allocation(filename, number_of_groups):
     print(batch_strength)
 
     #make_branch_strength(filename)
-    make_individual_branch(filename)
+    
+    #make_individual_branch(filename)
+    make_groups(filename,number_of_groups,batch_strength)
 
 
 
@@ -142,6 +227,6 @@ def group_allocation(filename, number_of_groups):
 
 
 filename = "Btech_2020_master_data.csv"
-number_of_groups=input()
+number_of_groups=12
 
 group_allocation(filename, number_of_groups)
