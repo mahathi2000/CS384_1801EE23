@@ -136,7 +136,7 @@ def make_stats_grouping(number_of_groups):
         writer.writerow(header)
 
         for i in range(number_of_groups):
-            print('This loop runs {} times',i)
+            #print('This loop runs {} times',i)
             group_num=i+1
             padded_group= str(group_num).zfill(2)
             group_file_name='Group_G'+padded_group+'.csv'
@@ -297,11 +297,11 @@ def group_allocation(filename, number_of_groups):
     
     reader = csv.reader(file)
     batch_strength= len(list(reader))-1
-    print(batch_strength)
+    #print(batch_strength)
 
-    #make_branch_strength(filename)
+    make_branch_strength(filename)
     
-    #make_individual_branch(filename)
+    make_individual_branch(filename)
     make_groups(filename,number_of_groups,batch_strength)
     make_stats_grouping(number_of_groups)
 
