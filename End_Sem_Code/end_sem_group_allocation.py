@@ -25,13 +25,13 @@ def make_groups(filename,number_of_groups,batch_strength):
     os.mkdir(path)
 
     #creating empty group files
-    # for i in range(int(number_of_groups)):
-    #     group_number=i+1
-    #     padded_group= str(group_number).zfill(2)
-    #     group_file_name='Group_G'+padded_group
-    #     with open(path +'/'+ group_file_name, 'a', newline='') as file:
-    #             writer = csv.writer(file)
-    #             writer.writerow(headers)
+    for i in range(int(number_of_groups)):
+        group_number=i+1
+        padded_group= str(group_number).zfill(2)
+        group_file_name='Group_G'+padded_group+'.csv'
+        with open(path +'/'+ group_file_name, 'a', newline='') as file:
+                writer = csv.writer(file)
+                writer.writerow(headers)
 
     with open('branch_strength.csv','r') as file:
         reader=csv.reader(file,delimiter=',')
@@ -128,45 +128,57 @@ def make_stats_grouping(number_of_groups):
 
     # Path
     path = os.path.join(parent_dir, directory)
+    os.chdir(path)
     stats_file_name='stats_grouping.csv'
     header=['group','total','EE','ME','CS','CE','CB','MM']
-    with open(path +'/'+ stats_file_name, 'a', newline='') as file:
+    with open(stats_file_name, 'a', newline='') as file:
         writer = csv.writer(file)
         writer.writerow(header)
 
-    for i in range(number_of_groups):
-        group_num=i+1
-        padded_group= str(group_num).zfill(2)
-        group_file_name='Group_G'+padded_group+'.csv'
-        print(group_file_name)
-        with open(group_file_name,'r') as file:
-            reader = csv.reader(file, delimiter=',')
-            lines=len(list(reader))
-        all_rolls=pd.read_csv(group_file_name)
-        branch_code=[]
-        with open(filename,'r') as file:
-            reader = csv.reader(file, delimiter=',')
-        
-            for row in reader:
-                roll=row[0]
-                branch=roll[4:6]
-                branch_code.append(branch)
+        for i in range(number_of_groups):
+            print('This loop runs {} times',i)
+            group_num=i+1
+            padded_group= str(group_num).zfill(2)
+            group_file_name='Group_G'+padded_group+'.csv'
+            #print(group_file_name)
+
+            #total number of stuents in this group
+            with open(group_file_name,'r') as file:
+                reader = csv.reader(file, delimiter=',')
+                next(reader)
+                lines=len(list(reader))
+                #print(lines)
+
+
+            all_rolls=pd.read_csv(group_file_name)
+            branch_code=[]
+            with open(group_file_name,'r') as file:
+                reader = csv.reader(file, delimiter=',')
+                next(reader)
+                for row in reader:
+                    roll=row[0]
+                    branch=roll[4:6]
+                    branch_code.append(branch)
+            #print(branch_code)
+            #print(len(branch_code))
+            #print(all_rolls)
+            #print(len(all_rolls))
             all_rolls['BRANCH_CODE']=branch_code
 
-        #print(all_rolls)
-        df=all_rolls
-        new_df=df.groupby(['BRANCH_CODE']).size()
-        print(new_df)
-
-
-
-
-
-
-
-
-        
-        row=[group_file_name,lines,EE_count,ME_count,CS_count,CE_count,CB_count,MM_count]
+            #print(all_rolls)
+            #df=all_rolls
+            #print(df)
+            #print('This group ends here')
+            new_df=all_rolls.groupby(['BRANCH_CODE']).size()
+            EE_count=new_df['EE']
+            ME_count=new_df['ME']
+            CS_count=new_df['CS']
+            CE_count=new_df['CE']
+            CB_count=new_df['CB']
+            MM_count=new_df['MM']
+            
+            row=[group_file_name,lines,EE_count,ME_count,CS_count,CE_count,CB_count,MM_count]
+            writer.writerow(row)
     pass
     
 
@@ -291,7 +303,7 @@ def group_allocation(filename, number_of_groups):
     
     #make_individual_branch(filename)
     make_groups(filename,number_of_groups,batch_strength)
-    #make_stats_grouping()
+    make_stats_grouping(number_of_groups)
 
 
 
