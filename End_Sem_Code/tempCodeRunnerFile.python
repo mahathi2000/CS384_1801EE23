@@ -1,0 +1,12 @@
+from tkinter import *
+
+root=Tk()
+
+#title of the notepad
+root.title("Untitled - Notepad")
+
+
+#gui logic here
+
+root.mainloop()
+
