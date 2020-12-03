@@ -231,14 +231,40 @@ def findcharcount():
 
 
 def findcreatedtime():
+    global file
     # global submenu9,file
     # #today=date.today()
     # #now=datetime.now()
     # #dt_string=now.strftime("%d/%m/%Y:%H:%S")
     # submenu9.entryconfig(0,label=time.ctime(pathlib.Path(file)))
+
+    if file!=None:
+        fname=pathlib.Path(file)
+        assert fname.exists(),f'No such file: {fname}' #check that the file exists
+        #print(fname.stat())
+
+        #mtime=datetime.fromtimestamp(fname.stat().st_mtime)
+        #print(mtime)
+
+        ctime=datetime.fromtimestamp(fname.stat().st_ctime)
+        #print(ctime)
+        submenu9.entryconfig(0,label=ctime)
+
+
+
+
     pass
 
 def findmodifiedtime():
+    if file!=None:
+        fname=pathlib.Path(file)
+        assert fname.exists(),f'No such file: {fname}' #check that the file exists
+        #print(fname.stat())
+
+        mtime=datetime.fromtimestamp(fname.stat().st_mtime)
+        #print(mtime)
+        submenu10.entryconfig(0,label=mtime)
+
     pass
 
 
