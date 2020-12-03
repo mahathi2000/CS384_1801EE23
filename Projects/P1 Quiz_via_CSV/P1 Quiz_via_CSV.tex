@@ -1,0 +1,111 @@
+\documentclass[12pt]{article}
+
+\title{CS384 2020 Project 1 - Quiz Portal}
+\author{Mayank Agarwal} 
+\date{}
+\usepackage[letterpaper, margin=0.71in]{geometry}
+
+\begin{document}
+{\let\newpage\relax\maketitle} 
+%This will keep on adding and we shall comment out the older ones 
+
+\textbf{Git Requirements:}
+
+\begin{enumerate}
+	\item One of the partner needs to fork out the project, then place for merge request. I will check in the git logs.
+	\item q2.csv, q3.csv needs to be completed with at least 10 questions each. 
+	\item At least 5 commits and each commit should be of 6 words.
+\end{enumerate}
+
+You are required to develop a quiz portal using a input csv file.
+
+The input file is a csv (with , delimited) in the following format: (see quiz\_wise\_questions \textbackslash q1.csv) for reference
+
+\begin{itemize}
+	 \item ques\_no: Goes serially as 1...n
+	\item  question: the exact question. Assume that the question does not have , character.
+	\item  option1: choice 1
+	\item option2:  choice 2
+	\item  option3:  choice 3
+	\item option4:  choice 4
+	\item  correct\_option: the correct choice among 1, 2, 3, 4. Exactly 1 option will be correct.
+	\item marks\_correct\_ans: Marks to be assigned if the answer is correct. 
+	\item marks\_wrong\_ans: Marks to be deducted if the answer is correct. 
+	\item compulsory: If the tag is yes, then it need to be answered mandatory. If the user does not answer it, it needs to be treated like a wrong answer.
+	\item time=20m: Is only present in line 1, the program needs to extract time time and display a ticking clock continuously. Once the timer is expired, it will auto submit the quiz. Lets say the user is attempting a question, and wrote option \textbf{C} as the choice, but did not press \textbf{Enter} key to submit and the timer expires. In such a case, it need to be treated as a non submitted question (i.e., as if the user did not attempt the question at all)  
+\end{itemize}
+
+As an example: see the 2nd line of the csv 
+
+
+1 , What is the capital of India , Mumbai , Chennai , New Delhi , Kolkata , 3 , 5 , -1 , n , 
+
+
+Here the user will be asked to answer the question:\\ What is the capital of India, and is provided with 4 options,\\ Mumbai , Chennai , New Delhi , Kolkata. \\The next, number 3, represents the choice which is correct, Here the 3rd option - New Delhi is correct. \\Next, the number 5 indicates the marks that needs to be assigned if the answer is correct, \\ Next, the number -1 indicates the marks that needs to be deducted if the answer is wrong,\\ \textbf{n} indicates that the question is \textbf{not} compulsory, so the user can skip the question and move to next if s/he does not wish to attempt.
+
+You need to make use of sqlite3 database for the project.
+
+Database Name: \textbf{project1\_quiz\_cs384}
+
+Table 1: \textbf{project1\_registration}: username, password(hashed version), name, whatsapp number
+
+Table 2: \textbf{project1\_marks}: roll, quiz\_num, total\_marks
+\begin{enumerate}
+	\item Ask the user to register / login. The registration page should have the following: a) Name b) Roll c)Password d) Whatsapp number. Registration information needs to be stored in sqlite3 database. Password needs to be stored in a hashed manner in the database. Name this table as Table 1: \textbf{project1\_registration}
+	
+	\item Login: username = rollnumber and password = chosen by user in Step 1.  
+	
+	\item Every users final marks needs to be stored in the database. Table 2. If marks for a quiz are already present, delete that quiz marks for that particular roll number and re-insert (or update)
+	
+	
+\end{enumerate}
+
+This is how the interface should appear on the command line window. On starting program, the user will be asked to login, if the user is not registered s/he will asked to register. Once user logins, the user is displayed questions one by one. There should be a timer that is ticking down second by second. 
+
+Questions will be stored in the \textbf{quiz\_wise\_questions} folder. The quiz needs to be auto-read based on the filename. \textbf{q1, q2, q3... qn} represent the quizzes. So, when the user logs in s/he gets to choose among which quiz  s/he needs to attempt. Once   s/he choose a quiz number, say q1, then after submission of quiz, two tasks should happen: Task1) Final marks needs to be entered into the database with roll number, quiz number and total\_marks (Table 2).  Task2) The individual responses for every roll, for every quiz needs to be stored in \textbf{quiz\_wise\_responses} folder as \textbf{quiz\_number\_roll\_number.csv} (E.g., q1\_1701ME01.csv). The first 10 columns will be same as q1.csv and three new columns needs to be added: \textbf{marked\_choice,	Total, Legend}\\
+Please refer
+\begin{verbatim}
+Projects\P1 Quiz_via_CSV\individual_responses\q1_1701ME01.csv
+\end{verbatim}
+The file is self explanatory. \textbf{marked\_choice} contains the choice marked by the user for every question. \textbf{Total} provides the total for the Legends, as you can see in the \textbf{Legend} column. 
+
+
+These 7 lines are displayed always on the terminal window (without the L1, L2, ..., L7), irrespective of question/quiz:\\
+\textbf{L1) } Timer: Countdown (Take the minutes from the first line of the quiz\_input.csv file )\\
+\textbf{L2) } Roll: \\
+\textbf{L3) } Name: Fetch from database \\  
+\textbf{L4) } Unattempted Questions: Map the following keyboard Shortcut (Ctrl+Alt+U). Once a user presses  keyboard Shortcut (Ctrl+Alt+U), this line shows the question(s) that are un-attempted till now.  \\
+\textbf{L5) } Goto Question: Map the following keyboard Shortcut (Ctrl+Alt+G). Once a user presses  keyboard Shortcut (Ctrl+Alt+G), the user can goto any question.  \\
+\\
+\textbf{L6) } Final Submit: Map the following keyboard Shortcut (Ctrl+Alt+F). Once a user presses  keyboard Shortcut (Ctrl+Alt+F), the final submission is done with a confirmation: Do you want to final submit? If yes is entered, the submission is done.    \\
+\\
+\textbf{L7) } Export Database into CSV: Map the following keyboard Shortcut (Ctrl+Alt+E). Once a user presses  keyboard Shortcut (Ctrl+Alt+E), the database entries for Table 2 is exported to csv file. If n quizzes are taken, then n quiz csv are exported with quiz1.csv ... quizn.csv in the same directory. Every quizn.csv will have the records of individual students who gave that test.   \\
+
+\textbf{Command line display}
+
+Question 1) What is the capital of India? \\
+Option 1) Mumbai      \\ 
+Option 2) Chennai \\ 
+Option 3)  New Delhi \\ 
+Option 4)  Kolkata. \\
+
+Credits if Correct Option: 5  \\ 
+Negative Marking: -1 \\ 
+Is compulsory: No  \\ 
+
+Enter Choice: \textbf{1, 2, 3, 4, S} : \textbf{S} is to skip question
+
+Also after the submission is done, 
+the user will be shown the following menu on the commandline:\\
+Total Quiz Questions: \\
+Total Quiz Questions Attempted:  \\
+Total Correct Question:  \\
+Total Wrong Questions:  \\
+Total Marks: obtained marks/total marks\\
+
+\textbf{and} roll, quiz\_num, total\_marks needs to be entered into the Table 2 of the database.  
+
+
+
+
+\end{document}

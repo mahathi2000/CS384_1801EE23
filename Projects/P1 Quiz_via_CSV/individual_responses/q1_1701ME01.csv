@@ -1,0 +1,6 @@
+ques_no,question,option1,option2,option3,option4,correct_option,marks_correct_ans,marks_wrong_ans,compulsory,marked_choice,Total,Legend
+1,What is the capital of India,Mumbai,Chennai,New Delhi,Kolkata,3,5,-1,n,3,2,Correct Choices
+2,4+4 =,4,7,9,8,4,4,-1,y,4,1,Wrong Choices
+3,Capital of France,Paris,Patna,Amhara,London,1,8,-2,n,2,0,Unattempted
+,,,,,,,,,,,7,Marks Obtained
+,,,,,,,,,,,17,Total Quiz Marks
