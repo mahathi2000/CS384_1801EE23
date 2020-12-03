@@ -98,6 +98,19 @@ def quitApp():
 
     pass
 
+def cut():
+    TextArea.event_generate(("<<Cut>>"))
+    pass
+
+def copy():
+    TextArea.event_generate(("<<Copy>>"))
+    pass
+
+def paste():
+    TextArea.event_generate(("<<Paste>>"))
+    pass
+
+
 
 # creating a menu bar
 
@@ -125,6 +138,15 @@ FileMenu.add_separator()
 FileMenu.add_command(label="Exit", command=quitApp)
 
 MenuBar.add_cascade(label="File", menu=FileMenu)
+
+EditMenu= Menu(MenuBar,tearoff=0)
+
+#cut copy paste features
+EditMenu.add_command(label="Cut", command=cut)
+EditMenu.add_command(label="Copy", command=copy)
+EditMenu.add_command(label="Paste", command=paste)
+
+MenuBar.add_cascade(label="Edit", menu=EditMenu)
 
 
 root.config(menu=MenuBar)
