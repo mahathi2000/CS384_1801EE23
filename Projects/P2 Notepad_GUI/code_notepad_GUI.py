@@ -176,7 +176,43 @@ def find_func(event=None):
 
     find_dialogue.mainloop()
 
+def findwordcount():
+    global TextArea,submenu5
+    if TextArea.compare("end-1c", "!=", "1.0"):
+        submenu5.entryconfig(0,label=str(str(len(TextArea.get(0.0,END).replace("\n"," ").split(" "))-1)+" Words"))
 
+    pass
+
+def findlinecount():
+    global TextArea,submenu3
+    if TextArea.compare("end-1c", "!=", "1.0"):
+        submenu6.entryconfig(0,label=str(str(int(TextArea.index('end').split('.')[0]) - 1)+" Lines"))
+    pass
+
+# def findcharcount():
+#     global TextArea,submenu7
+
+#     if TextArea.compare("end-1c","!=","1.0"):
+#         submenu7.entryconfig(0,label=str(len(meg.get("1.0", 'end-1c')))+" Chars"
+    
+def findcharcount():
+    global TextArea,submenu7
+    if TextArea.compare("end-1c", "!=", "1.0"):
+        #submenu7.entryconfig(0,label=str(str(len(TextArea.get("1.0", 'end-1c'))+" Chars")))
+        submenu7.entryconfig(0,label=str(str(len(TextArea.get(0.0, END))-1)+" Chars"))
+    pass
+
+
+def findcreatedtime():
+    # global submenu9,file
+    # #today=date.today()
+    # #now=datetime.now()
+    # #dt_string=now.strftime("%d/%m/%Y:%H:%S")
+    # submenu9.entryconfig(0,label=time.ctime(pathlib.Path(file)))
+    pass
+
+def findmodifiedtime():
+    pass
 
 # creating a menu bar
 
@@ -214,7 +250,41 @@ EditMenu.add_command(label="Paste", command=paste)
 EditMenu.add_command(label="Find & Replace",command=find_func)
 
 MenuBar.add_cascade(label="Edit", menu=EditMenu)
+#edit menu ends here
 
+#stats menu starts here
+now=datetime.now()
+
+
+
+submenu3=Menu(MenuBar,tearoff=0)
+submenu5=Menu(submenu3,tearoff=0,postcommand=findwordcount)
+submenu6=Menu(submenu3,tearoff=0,postcommand=findlinecount)
+submenu9=Menu(submenu3,tearoff=0,postcommand=findcreatedtime)
+submenu10=Menu(submenu3,tearoff=0,postcommand=findmodifiedtime)
+MenuBar.add_cascade(label="Stats",menu=submenu3)
+submenu3.add_cascade(label="Word Count",menu=submenu5)
+submenu3.add_cascade(label="Line Count",menu=submenu6)
+submenu3.add_cascade(label="Created Time",menu=submenu9)
+submenu3.add_cascade(label="Modified Time",menu=submenu10)
+submenu5.add_command(label="0 Words",command=None)
+submenu6.add_command(label="0 Lines",command=None)
+submenu9.add_command(label=now.strftime("%Y-%m-%d %H:%M:%S"),command=None)
+submenu10.add_command(label=now.strftime("%Y-%m-%d %H:%M:%S"),command=None)
+
+submenu7=Menu(submenu3,tearoff=0,postcommand=findcharcount)
+submenu3.add_cascade(label="Char Count",menu=submenu7)
+submenu7.add_command(label="0 Chars",command=None)
+
+
+
+#created time
+
+
+
+
+
+#stats menu ends here
 
 root.config(menu=MenuBar)
 
