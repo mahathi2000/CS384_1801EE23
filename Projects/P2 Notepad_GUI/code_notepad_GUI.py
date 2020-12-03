@@ -2,31 +2,35 @@ from tkinter import *
 import tkinter as tk
 from tkinter import ttk
 from tkinter.messagebox import showinfo
-from tkinter.filedialog import askopenfilename, asksaveasfilename
+from tkinter.filedialog import askopenfilename,asksaveasfilename
 import datetime
 import time
 import os
-import os.path
+import os.path 
 from datetime import datetime
 import pathlib
 
 
 os.system("cls")
 
-root = Tk()
+root=Tk()
 root.title("Untitled-Notepad")
 root.wm_iconbitmap("blue_icon.ico")
 
 root.geometry("644x788")
 
-# Adding Text Area
-TextArea = Text(root, font="lucida 13")
+#Adding Text Area
+TextArea=Text(root,font="lucida 13")
 
 
-file = None
-TextArea.pack(expand=True, fill=BOTH)
-# fill=BOTH fills in both x direction and y direction
-# no file to be opened yet
+file=None
+TextArea.pack(expand=True,fill=BOTH)
+#fill=BOTH fills in both x direction and y direction
+#no file to be opened yet
+
+
+
+
 
 
 def newFile():
@@ -36,12 +40,11 @@ def newFile():
     TextArea.delete(1.0, END)
     pass
 
-
 def openFile():
     global file
     file = askopenfilename(defaultextension=".txt",
                            filetypes=[("All Files", "*.*"),
-                                      ("Text Documents", "*.txt")])
+                                     ("Text Documents", "*.txt")])
     if file == "":
         file = None
     else:
@@ -52,18 +55,17 @@ def openFile():
         f.close()
     pass
 
-
 def saveFile():
     global file
     if file == None:
-        file = asksaveasfilename(initialfile='Untitled.txt', defaultextension=".txt",
-                                 filetypes=[("All Files", "*.*"),
-                                            ("Text Documents", "*.txt")])
-        if file == "":
+        file = asksaveasfilename(initialfile = 'Untitled.txt', defaultextension=".txt",
+                           filetypes=[("All Files", "*.*"),
+                                     ("Text Documents", "*.txt")])
+        if file =="":
             file = None
 
         else:
-            # Save as a new file
+            #Save as a new file
             f = open(file, "w")
             f.write(TextArea.get(1.0, END))
             f.close()
@@ -79,19 +81,17 @@ def saveFile():
 
 
 def saveAs():
-    global root, textarea, filvar
-    filvar = asksaveasfilename(defaultextension=".txt", filetypes=[
-                               ("All Files", "*.*"), ("Text Documents", "*.txt")])
-    if filvar == "":
-        filvar = None
+    global root,textarea,filvar
+    filvar = asksaveasfilename(defaultextension=".txt",filetypes=[("All Files", "*.*"),("Text Documents", "*.txt")])
+    if filvar=="":
+        filvar=None
     else:
-        file = open(filvar, "w")
-        file.write(textarea.get(1.0, END))
+        file=open(filvar,"w")
+        file.write(textarea.get(1.0,END))
         file.close()
-        showinfo("Successfully saved", str(
-            "Saved as "+filvar+" successfully!"))
+        showinfo("Successfully saved", str("Saved as "+filvar+" successfully!"))
     pass
-
+    
 
 def quitApp():
     root.destroy()
@@ -109,6 +109,16 @@ def copy():
 def paste():
     TextArea.event_generate(("<<Paste>>"))
     pass
+
+
+
+
+
+
+
+
+
+
 
 
 def find_func(event=None):
@@ -176,6 +186,23 @@ def find_func(event=None):
 
     find_dialogue.mainloop()
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+def about():
+    showinfo("Notepad","Notepad by mahathi and anisha benny")
+    pass
+
 def findwordcount():
     global TextArea,submenu5
     if TextArea.compare("end-1c", "!=", "1.0"):
@@ -214,37 +241,58 @@ def findcreatedtime():
 def findmodifiedtime():
     pass
 
-def about():
-    showinfo("Notepad","Notepad by mahathi and anisha benny")
-    pass
 
-# creating a menu bar
 
-MenuBar = Menu(root)
-# File Menu starts
-# a horizontal menu is created
-# check his vid to understand this Menu function
 
-FileMenu = Menu(MenuBar, tearoff=0)
 
-# To open new file
-FileMenu.add_command(label="New", command=newFile)
 
-# To Open already existing file
-FileMenu.add_command(label="Open", command=openFile)
 
-# To save the current file
-FileMenu.add_command(label="Save", command=saveFile)
 
-# To save a new file
-FileMenu.add_command(label="Save As...", command=saveAs)
+
+
+
+
+
+
+
+
+
+
+
+
+
+#creating a menu bar
+
+MenuBar=Menu(root)
+#File Menu starts
+#a horizontal menu is created
+#check his vid to understand this Menu function
+
+FileMenu=Menu(MenuBar,tearoff=0)
+
+#To open new file
+FileMenu.add_command(label="New",command=newFile)
+
+#To Open already existing file
+FileMenu.add_command(label="Open",command= openFile)
+
+#To save the current file
+FileMenu.add_command(label="Save",command=saveFile)
+
+#To save a new file
+FileMenu.add_command(label="Save As...",command=saveAs)
 
 
 FileMenu.add_separator()
-FileMenu.add_command(label="Exit", command=quitApp)
+FileMenu.add_command(label="Exit", command= quitApp)
 
-MenuBar.add_cascade(label="File", menu=FileMenu)
+MenuBar.add_cascade(label="File",menu=FileMenu)
 
+
+#File menu ends
+
+
+#Edit Menu starts
 EditMenu= Menu(MenuBar,tearoff=0)
 
 #cut copy paste features
@@ -253,8 +301,33 @@ EditMenu.add_command(label="Copy", command=copy)
 EditMenu.add_command(label="Paste", command=paste)
 EditMenu.add_command(label="Find & Replace",command=find_func)
 
+
+
+
+
+
+
+
+
 MenuBar.add_cascade(label="Edit", menu=EditMenu)
-#edit menu ends here
+#Edit Menu Ends
+
+
+#stats menu starts here
+
+# statsMenu=Menu(MenuBar,tearoff=0)
+# #submenu5=Menu(statsMenu,tearoff=0,postcommand=findwordcount)
+# #submenu5.add_command(label="0 Words",command=None)
+# statsMenu.add_command(label="Word Count", command=findwordcount)
+# statsMenu.add_command(label="Char Count")
+# statsMenu.add_command(label="Created Time")
+# statsMenu.add_command(label="Modified Time")
+
+# MenuBar.add_cascade(label="Stats",menu=statsMenu)
+
+
+
+#stats menu ends here
 
 #stats menu starts here
 now=datetime.now()
@@ -290,6 +363,8 @@ submenu7.add_command(label="0 Chars",command=None)
 
 #stats menu ends here
 
+
+
 #Help Menu Starts
 
 HelpMenu=Menu(MenuBar,tearoff=0)
@@ -299,6 +374,18 @@ MenuBar.add_cascade(label="Help",menu=HelpMenu)
 #Help menu Ends
 
 root.config(menu=MenuBar)
+
+#Adding Scroll Bar
+
+Scroll=Scrollbar(TextArea)
+Scroll.pack(side=RIGHT, fill=Y)
+Scroll.config(command=TextArea.yview)
+TextArea.config(yscrollcommand=Scroll.set)
+
+
+
+
+
 
 
 root.mainloop()
