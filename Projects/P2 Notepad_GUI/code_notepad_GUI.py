@@ -214,6 +214,10 @@ def findcreatedtime():
 def findmodifiedtime():
     pass
 
+def about():
+    showinfo("Notepad","Notepad by mahathi and anisha benny")
+    pass
+
 # creating a menu bar
 
 MenuBar = Menu(root)
@@ -285,6 +289,14 @@ submenu7.add_command(label="0 Chars",command=None)
 
 
 #stats menu ends here
+
+#Help Menu Starts
+
+HelpMenu=Menu(MenuBar,tearoff=0)
+HelpMenu.add_command(label="About Notepad", command=about)
+MenuBar.add_cascade(label="Help",menu=HelpMenu)
+
+#Help menu Ends
 
 root.config(menu=MenuBar)
 
