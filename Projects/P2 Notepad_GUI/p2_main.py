@@ -1,3 +1,10 @@
+
+#Hi everyone
+#CS384 2020-Making Notepad using Tkinter
+
+
+
+
 from tkinter import *
 import tkinter as tk
 from tkinter import ttk
@@ -35,6 +42,7 @@ TextArea.pack(expand=True,fill=BOTH)
 
 
 def newFile():
+    #makes file global variable and we can access the file
     global file
     root.title("Untitled - Notepad")
     file = None
@@ -57,28 +65,48 @@ def openFile():
     pass
 
 def saveFile():
-    global file
-    if file == None:
-        file = asksaveasfilename(initialfile = 'Untitled.txt', defaultextension=".txt",
-                           filetypes=[("All Files", "*.*"),
-                                     ("Text Documents", "*.txt")])
-        if file =="":
-            file = None
+    global url
+    try:
+        if url :
+            content = str(text_editor.get(1.0,tk.END))
+            with open(url,'w',encoding= 'utf-8') as fw:
+                fw.write(content)
+        else :
+            url = filedialog.asksaveasfile(mode = 'w' ,defaultextension = '.txt',filetypes=(('Text File','*.txt'),('All files','*.*')))
+            content = text_editor.get(1.0,tk.END)
+            url.write(content)
+            url.close()
+    except :
+        return 
 
-        else:
-            #Save as a new file
-            f = open(file, "w")
-            f.write(TextArea.get(1.0, END))
-            f.close()
 
-            root.title(os.path.basename(file) + " - Notepad")
-            print("File Saved")
-    else:
-        # Save the file
-        f = open(file, "w")
-        f.write(TextArea.get(1.0, END))
-        f.close()
-    pass
+
+
+
+
+
+    # global file
+    # if file == None:
+    #     file = asksaveasfilename(initialfile = 'Untitled.txt', defaultextension=".txt",
+    #                        filetypes=[("All Files", "*.*"),
+    #                                  ("Text Documents", "*.txt")])
+    #     if file =="":
+    #         file = None
+
+    #     else:
+    #         #Save as a new file
+    #         f = open(file, "w")
+    #         f.write(TextArea.get(1.0, END))
+    #         f.close()
+
+    #         root.title(os.path.basename(file) + " - Notepad")
+    #         print("File Saved")
+    # else:
+    #     # Save the file
+    #     f = open(file, "w")
+    #     f.write(TextArea.get(1.0, END))
+    #     f.close()
+    # pass
 
 
 def saveAs():
@@ -88,7 +116,7 @@ def saveAs():
         filvar=None
     else:
         file=open(filvar,"w")
-        file.write(textarea.get(1.0,END))
+        file.write(TextArea.get(1.0,END))
         file.close()
         showinfo("Successfully saved", str("Saved as "+filvar+" successfully!"))
     pass
@@ -207,7 +235,8 @@ def about():
 def findwordcount():
     global TextArea,submenu5
     if TextArea.compare("end-1c", "!=", "1.0"):
-        submenu5.entryconfig(0,label=str(str(len(TextArea.get(0.0,END).replace("\n"," ").split(" "))-1)+" Words"))
+        #submenu5.entryconfig(0,label=str(str(len(TextArea.get(0.0,END).replace("\n"," ").split(" "))-1)+" Words"))
+        submenu5.entryconfig(0,label=len(TextArea.get(1.0, "end-1c").split()))
 
     pass
 
@@ -227,7 +256,8 @@ def findcharcount():
     global TextArea,submenu7
     if TextArea.compare("end-1c", "!=", "1.0"):
         #submenu7.entryconfig(0,label=str(str(len(TextArea.get("1.0", 'end-1c'))+" Chars")))
-        submenu7.entryconfig(0,label=str(str(len(TextArea.get(0.0, END))-1)+" Chars"))
+        #submenu7.entryconfig(0,label=str(str(len(TextArea.get(0.0, END))-1)+" Chars"))
+        submenu7.entryconfig(0,label=len(TextArea.get(1.0, "end-1c").replace(" ", "")))
     pass
 
 
@@ -340,21 +370,7 @@ MenuBar.add_cascade(label="Edit", menu=EditMenu)
 #Edit Menu Ends
 
 
-#stats menu starts here
 
-# statsMenu=Menu(MenuBar,tearoff=0)
-# #submenu5=Menu(statsMenu,tearoff=0,postcommand=findwordcount)
-# #submenu5.add_command(label="0 Words",command=None)
-# statsMenu.add_command(label="Word Count", command=findwordcount)
-# statsMenu.add_command(label="Char Count")
-# statsMenu.add_command(label="Created Time")
-# statsMenu.add_command(label="Modified Time")
-
-# MenuBar.add_cascade(label="Stats",menu=statsMenu)
-
-
-
-#stats menu ends here
 
 #stats menu starts here
 now=datetime.now()
