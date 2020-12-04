@@ -15,7 +15,8 @@ from tkinter import *
 os.system('cls')
 
 # sqlite3 login and registration
-
+cwd=os.path.dirname(os.path.realpath(__file__))
+os.chdir(cwd)
 with sqlite3.connect("project1_quiz_cs384.db") as db:
     cursor=db.cursor()
 
