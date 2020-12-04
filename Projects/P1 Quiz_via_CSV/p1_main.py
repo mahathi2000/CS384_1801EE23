@@ -37,13 +37,16 @@ total_marks INTEGER NOT NULL
 
 
 def registration():
+    global name
     username= input('Username: ')
     password = input('Password: ')
     name = input('Name: ')
     whatsapp = input('WhatsApp Number: ')
     h = hashlib.md5(password.encode())
+    name=name.upper()
     db = sqlite3.connect('project1_quiz_cs384.db')
     c = db.cursor()
+    username=username.upper()
     c.execute('''SELECT username AND password FROM project1_registration WHERE username=?;''', (username,))
     if c.fetchall():
         c.execute('DELETE FROM project1_registration WHERE username = (?)',(username))
@@ -52,13 +55,18 @@ def registration():
     quiz(username)
 
 def login():
+    global name
     user = input('Username: ')
     password = input('Password: ')
+    user=user.upper()
     h = hashlib.md5(password.encode())
     db = sqlite3.connect('project1_quiz_cs384.db')
     c = db.cursor()
     c.execute('SELECT * FROM project1_registration WHERE username = ? AND password = ?', (user, h.hexdigest()))
-    if c.fetchall():
+    na=c.fetchall()
+    if na:
+        name=na[0][2]
+        # print(na)
         quiz(user)
     else:
         print('Login failed. Kindly register yourself by filling in the following details')
@@ -73,10 +81,11 @@ neg_marks=[]
 compulsory=[]
 right_answer=[]
 marked_ans=[]
-time=20
 ques=1
 def make_list_of_q():
+    global timer
     cwd = os.getcwd()
+    global t
     path = os.path.join(cwd,f"quiz_wise_questions")
     os.chdir(path)
     global text
@@ -84,7 +93,7 @@ def make_list_of_q():
     p=df.columns[-1]
     t=re.split('[a-b=]+',p)
     t=re.split('[m]+',t[1])
-    time=int(t[0])
+    t=int(t[0])
     text = df.values.tolist()
     i=0
     for row in text:
@@ -104,11 +113,15 @@ def make_list_of_q():
             compulsory.append("Yes")
         else:
             compulsory.append("No")
+    mins, secs = divmod(t, 60) 
+    ti = '{:02d}:{:02d}'.format(mins, secs) 
     os.chdir(cwd)
 
 # saving results 
 def save_results():
-    global tot_marks,correct_q,wrong_q,total,q_no,attempt_q
+    global tot_marks,correct_q,wrong_q,total,q_no,attempt_q,t,o
+    o=1
+    print('')
     tot_marks=0
     correct_q=0
     wrong_q=0
@@ -121,7 +134,7 @@ def save_results():
     df = pd.read_csv(f"q{n}.csv")
     total=df['marks_correct_ans'].sum()
     df=df.drop(df.columns[-1], axis=1)
-    q_no=len(df.index)
+    q_no=len(questions)
     df['marked_choice']='0'
     df['Total']='0'
     df['Legend']='Unattempted'
@@ -146,8 +159,11 @@ def save_results():
                 skip+=1
             row[11]=tot_marks
             i+=1
-    if i<len(marked_ans)-1:
-        text[i:][11]=tot_marks
+    if i<len(questions):
+        for p in range(i,len(questions)):
+            if compulsory[p]=="Yes":
+                tot_marks+=neg_marks[p]
+            text[p][11]=tot_marks
     attempt_q=len(marked_ans)-skip
     # displaying of results 
     print("*"*100)
@@ -177,10 +193,32 @@ def save_results():
         writer.writerow(['','','','','','','','','','',tot_marks,'Marks Obtained'])
         writer.writerow(['','','','','','','','','','',total,'Total Quiz Marks'])
     os.chdir(cwd)
+    path = os.path.join(cwd,"quiz_wise_responses")
+    os.chdir(path)
+    with open('scores_q'+n+'.csv', 'a', newline='') as file:
+        writer = csv.writer(file)
+        if os.stat('scores_q'+n+'.csv').st_size == 0:
+            writer.writerow(["Roll",'Questions Attempted','Total Questions','Marks Scored','Total marks'])
+            writer.writerow([roll,attempt_q,len(questions),tot_marks,total])
+        else:
+            hj=pd.read_csv('scores_q'+n+'.csv')
+            index_names = hj[ hj['Roll'] == roll ].index
+            hj=hj.drop(index_names)
+            data={'Roll':[roll],'Questions Attempted':[attempt_q],'Total Questions':[len(questions)],'Marks Scored':[tot_marks],'Total marks':[total]}
+            if hj is None:
+                hj=pd.DataFrame(data,columns=["Roll",'Questions Attempted','Total Questions','Marks Scored','Total marks'])
+            else:
+                df2 = pd.DataFrame(data,columns=["Roll",'Questions Attempted','Total Questions','Marks Scored','Total marks'])
+                hj=hj.append(df2)
+            hj.to_csv('scores_q'+n+'.csv',index=0)
+    os.chdir(cwd)                
+    showresult()
 
 # displaying results 
 def showresult():
+    global tot_marks,correct_q,wrong_q,total,q_no,attempt_q
     lblQuestion.destroy()
+    lblbutton.destroy()
     r1.destroy()
     r2.destroy()
     r3.destroy()
@@ -193,18 +231,18 @@ def showresult():
         font = ("Comic sans MS",20,"bold"),
         background = "#a3a3c2",
     )
-    labelresulttext.pack(pady=(150,50))
+    labelresulttext.pack(pady=(100,50))
 
 # taking in user answer 
 def selected():
-    global radiovar,user_answer
+    global radiovar,t,o
     global lblQuestion,r1,r2,r3,r4,r5,lblRules
     global ques
-    x = radiovar.get()
-    marked_ans.append(x)
-    radiovar.set(-1)
-    if ques < len(questions):
-        lblQuestion.config(text= questions[indexes[ques]])
+    if ques < len(questions) and t>0:
+        x = radiovar.get()
+        radiovar.set(-1)
+        marked_ans.append(x)
+        lblQuestion.config(text=str(ques+1)+". "+questions[indexes[ques]])
         lblRules.config(text= "Credits if Correct Option: "+str(positive_marks[ques])+"\nNegative Marking: "+str(neg_marks[ques])+"\nIs compulsory: "+compulsory[ques])
         r1['text'] = answers_choice[indexes[ques]][0]
         r2['text'] = answers_choice[indexes[ques]][1]
@@ -212,103 +250,149 @@ def selected():
         r4['text'] = answers_choice[indexes[ques]][3]
         ques += 1
     else:
+        o=1
+        x = radiovar.get()
+        marked_ans.append(x)
         save_results()
-        showresult()
-        # calc()
-        # print(marked_ans)
+        # calc()  
+
+# timer being made 
+def timer():
+    global t,o,ti,lbltime
+    o=0
+    print('')
+    while t>=0 and o==0:
+        mins, secs = divmod(t, 60) 
+        ti= '{:02d}:{:02d}'.format(mins, secs) 
+        print(f'Time Left: {ti}', end="\r") 
+        lbltime = Label(
+            root,
+            text = "Time Left: "+ti,
+            font = ("Consolas", 16),
+            width = 500,
+            justify = "center",
+            wraplength = 400,
+            background = "#ffffff",
+        )
+        lbltime.pack()
+        root.update()
+        time.sleep(1) 
+        t -= 1
+        lbltime.destroy()
+    if o==0:   
+        print('')
+        print('Time is up! No further answer shall be considered')
+        save_results()
+
 
 # printing questions and options 
 def startquiz():
-    global lblQuestion,r1,r2,r3,r4,r5,lblRules
-    lblQuestion = Label(
-        root,
-        text = questions[indexes[0]],
-        font = ("Consolas", 16),
-        width = 500,
-        justify = "center",
-        wraplength = 400,
-        background = "#ffffff",
-    )
-    lblQuestion.pack(pady=(100,40))
+    global lblQuestion,r1,r2,r3,r4,r5,lblRules,o,lblbutton
+    o=0
+    if t>0:
+        lblQuestion = Label(
+            root,
+            text = "1. "+questions[indexes[0]],
+            font = ("Consolas", 16),
+            width = 500,
+            justify = "center",
+            wraplength = 400,
+            background = "#ffffff",
+        )
+        lblQuestion.pack(pady=(25,40))
 
-    global radiovar
-    radiovar = IntVar()
-    radiovar.set(-1)
+        global radiovar
+        radiovar = IntVar()
+        radiovar.set(-1)
 
-    r1 = Radiobutton(
-        root,
-        text = answers_choice[indexes[0]][0],
-        font = ("Times", 12),
-        value = 0,
-        variable = radiovar,
-        command = selected,
-        background = "#ffffff",
-    )
-    r1.pack(pady=5)
+        r1 = Radiobutton(
+            root,
+            text = answers_choice[indexes[0]][0],
+            font = ("Times", 12),
+            value = 0,
+            variable = radiovar,
+            command = selected,
+            background = "#ffffff",
+        )
+        r1.pack(pady=5)
 
-    r2 = Radiobutton(
-        root,
-        text = answers_choice[indexes[0]][1],
-        font = ("Times", 12),
-        value = 1,
-        variable = radiovar,
-        command = selected,
-        background = "#ffffff",
-    )
-    r2.pack(pady=5)
+        r2 = Radiobutton(
+            root,
+            text = answers_choice[indexes[0]][1],
+            font = ("Times", 12),
+            value = 1,
+            variable = radiovar,
+            command = selected,
+            background = "#ffffff",
+        )
+        r2.pack(pady=5)
 
-    r3 = Radiobutton(
-        root,
-        text = answers_choice[indexes[0]][2],
-        font = ("Times", 12),
-        value = 2,
-        variable = radiovar,
-        command = selected,
-        background = "#ffffff",
-    )
-    r3.pack(pady=5)
+        r3 = Radiobutton(
+            root,
+            text = answers_choice[indexes[0]][2],
+            font = ("Times", 12),
+            value = 2,
+            variable = radiovar,
+            command = selected,
+            background = "#ffffff",
+        )
+        r3.pack(pady=5)
 
-    r4 = Radiobutton(
-        root,
-        text = answers_choice[indexes[0]][3],
-        font = ("Times", 12),
-        value = 3,
-        variable = radiovar,
-        command = selected,
-        background = "#ffffff",
-    )
-    r4.pack(pady=5)
+        r4 = Radiobutton(
+            root,
+            text = answers_choice[indexes[0]][3],
+            font = ("Times", 12),
+            value = 3,
+            variable = radiovar,
+            command = selected,
+            background = "#ffffff",
+        )
+        r4.pack(pady=5)
 
-    r5 = Radiobutton(
-        root,
-        text = '**Skip this question**',
-        font = ("Times", 12),
-        value = 4,
-        variable = radiovar,
-        command = selected,
-        background = "#ffffff",
-    )
-    r5.pack(pady=15)
+        r5 = Radiobutton(
+            root,
+            text = '**Skip this question**',
+            font = ("Times", 12),
+            value = 4,
+            variable = radiovar,
+            command = selected,
+            background = "#ffffff",
+        )
+        r5.pack(pady=5)
 
-    lblRules = Label(
-        root,
-        text = "Credits if Correct Option: "+str(positive_marks[ques-1])+"\nNegative Marking: "+str(neg_marks[ques-1])+"\nIs compulsory: "+compulsory[ques-1],
-        width = 100,
-        font = ("Times",14),
-        background = "#4d4d4d",
-        foreground = "#ffffff",
-    )
-    lblRules.pack(pady=50)
-    
+        lblRules = Label(
+            root,
+            text = "Credits if Correct Option: "+str(positive_marks[ques-1])+"\nNegative Marking: "+str(neg_marks[ques-1])+"\nIs compulsory: "+compulsory[ques-1],
+            width = 100,
+            font = ("Consolas",12),
+            background = "#e6e6ff",
+            foreground = "#000000",
+        )
+        lblRules.pack(pady=15)
+        
+        lblbutton = Button(
+            root,
+            text = "SUBMIT",
+            font = ("Consolas",12),
+            relief = FLAT,
+            border = 10,
+            background="#3d3d5c",
+            foreground = "#ffffff",
+            command =save_results,
+        )
+        lblbutton.pack()
+        
 
 def startIspressed():
     labeltext.destroy()
     btnStart.destroy()
     make_list_of_q()
-    startquiz()
+    threading.Thread(target = timer).start()
+    threading.Thread(target = startquiz).start() 
+
 
 def quiz(r):
-    global n,root,labeltext,btnStart,roll
+    global n,root,labeltext,btnStart,roll,lblname,roll,name
     roll=r
     n=input("Kindly input the quiz set you woulld like to attempt from 1-3:")
 
@@ -318,13 +402,26 @@ def quiz(r):
     root.config(background="#ffffff")
     root.resizable(0,0)
 
+    lblname = Label(
+            root,
+            text = "ROLL: "+roll+"\nNAME: "+name+"\n\nQUIZ "+str(n),
+            font = ("Consolas", 16),
+            width = 500,
+            justify = "center",
+            wraplength = 400,
+            background = "#3d3d5c",
+            foreground = "#ffffff",
+        )
+    lblname.pack()
+
     labeltext = Label(
         root,
         text = "Click start to attempt the Quiz "+n,
         font = ("Comic sans MS",24,"bold"),
         background = "#ffffff",
+        foreground = "#666699",
     )
-    labeltext.pack(pady=(200,50))
+    labeltext.pack(pady=(150,50))
     
     img2 = PhotoImage(file="Frame.png")
     btnStart = Button(
@@ -332,7 +429,7 @@ def quiz(r):
         image = img2,
         relief = FLAT,
         border = 0,
-        command = startIspressed,
+        command =startIspressed,
     )
     btnStart.pack()
     root.mainloop()
