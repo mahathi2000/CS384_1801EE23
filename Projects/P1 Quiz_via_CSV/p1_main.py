@@ -13,12 +13,9 @@ import os
 import tkinter
 from tkinter import *
 os.system('cls')
-
 # sqlite3 login and registration
-
 with sqlite3.connect("project1_quiz_cs384.db") as db:
     cursor=db.cursor()
-
 cursor.execute('''
 CREATE TABLE IF NOT EXISTS project1_registration(
 username VARCHAR NOT NULL,
@@ -34,8 +31,6 @@ quiz_num INTEGER NOT NULL,
 total_marks INTEGER NOT NULL
 );
 ''')
-
-
 def registration():
     username= input('Username: ')
     password = input('Password: ')
@@ -44,10 +39,10 @@ def registration():
     h = hashlib.md5(password.encode())
     db = sqlite3.connect('project1_quiz_cs384.db')
     c = db.cursor()
+    c.execute('DELETE FROM project1_registration WHERE username = (?)',(username))
     c.execute("INSERT INTO project1_registration (username,password,name,whatsapp) VALUES (?,?,?,?)",(username,h.hexdigest(),name,whatsapp))
     db.commit()
     quiz(username,0)
-
 def login():
     user = input('Username: ')
     password = input('Password: ')
@@ -61,6 +56,37 @@ def login():
         print('Login failed. Kindly register yourself by filling in the following details')
         registration()
 
+def startIspressed():
+    print("True")
+
+def quiz(roll,lr):
+    global n,root,labeltext,btnStart
+    n=input("Kindly input the quiz set you woulld like to attempt from 1-3:")
+
+    root = tkinter.Tk()
+    root.title(f"Quiz {n}")
+    root.geometry("700x400")
+    root.config(background="#ffffff")
+    root.resizable(0,0)
+
+    labeltext = Label(
+        root,
+        text = "Click start to attempt the Quiz "+n,
+        font = ("Comic sans MS",24,"bold"),
+        background = "#ffffff",
+    )
+    labeltext.pack(pady=(0,100))
+
+    img2 = PhotoImage(file="Frame.png")
+    btnStart = Button(
+        root,
+        image = img2,
+        relief = FLAT,
+        border = 0,
+        command = startIspressed,
+    )
+    btnStart.pack()
+    root.mainloop()
 
 
 print("Kindly login to attempt the Quiz")
