@@ -56,19 +56,47 @@ def login():
         print('Login failed. Kindly register yourself by filling in the following details')
         registration()
 
+# Reading questions and answers of respective quiz
+questions=[]
+answers_choice=[]
+indexes=[]
+def make_list_of_q():
+    cwd = os.getcwd()
+    path = os.path.join(cwd,f"quiz_wise_questions")
+    os.chdir(path)
+    global text
+    df = pd.read_csv(f"q{n}.csv")
+    text = df.values.tolist()
+    i=0
+    for row in text:
+        li=[]
+        li.append(row[2])
+        li.append(row[3])
+        li.append(row[4])
+        li.append(row[5])
+        answers_choice.append(li)
+        questions.append(row[1])
+        indexes.append(i)
+        i+=1
+    os.chdir(cwd)
+
+
+
 def startIspressed():
     print("True")
+    labeltext.destroy()
+    btnStart.destroy()
+    make_list_of_q()
+    # startquiz()
 
 def quiz(roll,lr):
     global n,root,labeltext,btnStart
     n=input("Kindly input the quiz set you woulld like to attempt from 1-3:")
-
     root = tkinter.Tk()
     root.title(f"Quiz {n}")
     root.geometry("700x400")
     root.config(background="#ffffff")
     root.resizable(0,0)
-
     labeltext = Label(
         root,
         text = "Click start to attempt the Quiz "+n,
@@ -76,7 +104,7 @@ def quiz(roll,lr):
         background = "#ffffff",
     )
     labeltext.pack(pady=(0,100))
-
+    
     img2 = PhotoImage(file="Frame.png")
     btnStart = Button(
         root,
@@ -87,7 +115,5 @@ def quiz(roll,lr):
     )
     btnStart.pack()
     root.mainloop()
-
-
 print("Kindly login to attempt the Quiz")
 login()
