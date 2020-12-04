@@ -1,3 +1,7 @@
+# Quiz Project-project1_quiz_cs384
+# Anisha P B(1801ME11)
+# M Mahathi(1801EE23) 
+
 import sqlite3
 import os
 import csv
@@ -12,6 +16,7 @@ import sqlite3
 import os
 import tkinter
 from tkinter import *
+import keyboard
 os.system('cls')
 
 # sqlite3 login and registration
@@ -39,6 +44,8 @@ total_marks INTEGER NOT NULL
 
 def registration():
     global name
+    cwd=os.path.dirname(os.path.realpath(__file__))
+    os.chdir(cwd)
     username= input('Username: ')
     password = input('Password: ')
     name = input('Name: ')
@@ -50,13 +57,15 @@ def registration():
     username=username.upper()
     c.execute('''SELECT username AND password FROM project1_registration WHERE username=?;''', (username,))
     if c.fetchall():
-        c.execute('DELETE FROM project1_registration WHERE username = (?)',(username))
+        c.execute('DELETE FROM project1_registration WHERE username = ?',(username,))
     c.execute("INSERT INTO project1_registration (username,password,name,whatsapp) VALUES (?,?,?,?)",(username,h.hexdigest(),name,whatsapp))
     db.commit()
     quiz(username)
 
 def login():
     global name
+    cwd=os.path.dirname(os.path.realpath(__file__))
+    os.chdir(cwd)
     user = input('Username: ')
     password = input('Password: ')
     user=user.upper()
@@ -83,6 +92,12 @@ compulsory=[]
 right_answer=[]
 marked_ans=[]
 ques=1
+nav_unattempted_ques = "Ctrl+Alt+U"
+nav_goto_ques="Ctrl+Alt+G"
+nav_submit="Ctrl+Alt+F"
+radiovar_values=[]
+v=0
+x=-1
 def make_list_of_q():
     global timer
     cwd = os.getcwd()
@@ -116,6 +131,10 @@ def make_list_of_q():
             compulsory.append("No")
     mins, secs = divmod(t, 60) 
     ti = '{:02d}:{:02d}'.format(mins, secs) 
+    for i in range(len(questions)):
+        marked_ans.append(-1)
+    for i in range(len(questions)):
+        radiovar_values.append(-5)
     os.chdir(cwd)
 
 # saving results 
@@ -160,11 +179,13 @@ def save_results():
                 skip+=1
             row[11]=tot_marks
             i+=1
-    if i<len(questions):
-        for p in range(i,len(questions)):
-            if compulsory[p]=="Yes":
-                tot_marks+=neg_marks[p]
-            text[p][11]=tot_marks
+    # if i<len(questions):
+    #     for p in range(i,len(questions)):
+    #         if compulsory[p]=="Yes":
+    #             tot_marks+=neg_marks[p]
+    #         text[p][11]=tot_marks
+    # print(len(marked_ans),   skip)
+    # print(marked_ans)
     attempt_q=len(marked_ans)-skip
     # displaying of results 
     print("*"*100)
@@ -196,13 +217,13 @@ def save_results():
     os.chdir(cwd)
     path = os.path.join(cwd,"quiz_wise_responses")
     os.chdir(path)
-    with open('scores_q'+n+'.csv', 'a', newline='') as file:
+    with open('quiz'+n+'.csv', 'a', newline='') as file:
         writer = csv.writer(file)
-        if os.stat('scores_q'+n+'.csv').st_size == 0:
+        if os.stat('quiz'+n+'.csv').st_size == 0:
             writer.writerow(["Roll",'Questions Attempted','Total Questions','Marks Scored','Total marks'])
             writer.writerow([roll,attempt_q,len(questions),tot_marks,total])
         else:
-            hj=pd.read_csv('scores_q'+n+'.csv')
+            hj=pd.read_csv('quiz'+n+'.csv')
             index_names = hj[ hj['Roll'] == roll ].index
             hj=hj.drop(index_names)
             data={'Roll':[roll],'Questions Attempted':[attempt_q],'Total Questions':[len(questions)],'Marks Scored':[tot_marks],'Total marks':[total]}
@@ -211,15 +232,19 @@ def save_results():
             else:
                 df2 = pd.DataFrame(data,columns=["Roll",'Questions Attempted','Total Questions','Marks Scored','Total marks'])
                 hj=hj.append(df2)
-            hj.to_csv('scores_q'+n+'.csv',index=0)
+            hj.to_csv('quiz'+n+'.csv',index=0)
     os.chdir(cwd)                
     showresult()
 
 # displaying results 
 def showresult():
-    global tot_marks,correct_q,wrong_q,total,q_no,attempt_q
+    global tot_marks,correct_q,wrong_q,total,q_no,attempt_q,k
+    if  k==1:  
+        lblunatt.destroy()
     lblQuestion.destroy()
     lblbutton.destroy()
+    lblinstr.destroy()
+    lblnext.destroy()
     r1.destroy()
     r2.destroy()
     r3.destroy()
@@ -236,13 +261,20 @@ def showresult():
 
 # taking in user answer 
 def selected():
-    global radiovar,t,o
+    global radiovar,t,o,k,v,x
     global lblQuestion,r1,r2,r3,r4,r5,lblRules
     global ques
-    if ques < len(questions) and t>0:
+    if  k==1:  
+        lblunatt.destroy()
+    if v!=1:
         x = radiovar.get()
-        radiovar.set(-1)
-        marked_ans.append(x)
+        radiovar_values[ques-1]=x
+        marked_ans[ques-1]=x
+    elif x==-1:
+        if radiovar_values[ques-1]==-5:
+            radiovar_values[ques-1]=x
+    v=0
+    if ques < len(questions) and t>0:
         lblQuestion.config(text=str(ques+1)+". "+questions[indexes[ques]])
         lblRules.config(text= "Credits if Correct Option: "+str(positive_marks[ques])+"\nNegative Marking: "+str(neg_marks[ques])+"\nIs compulsory: "+compulsory[ques])
         r1['text'] = answers_choice[indexes[ques]][0]
@@ -250,12 +282,17 @@ def selected():
         r3['text'] = answers_choice[indexes[ques]][2]
         r4['text'] = answers_choice[indexes[ques]][3]
         ques += 1
-    else:
-        o=1
-        x = radiovar.get()
-        marked_ans.append(x)
-        save_results()
-        # calc()  
+        radiovar.set(radiovar_values[ques-1])
+    elif t>0:
+        ques=0
+        lblQuestion.config(text=str(ques+1)+". "+questions[indexes[ques]])
+        lblRules.config(text= "Credits if Correct Option: "+str(positive_marks[ques])+"\nNegative Marking: "+str(neg_marks[ques])+"\nIs compulsory: "+compulsory[ques])
+        r1['text'] = answers_choice[indexes[ques]][0]
+        r2['text'] = answers_choice[indexes[ques]][1]
+        r3['text'] = answers_choice[indexes[ques]][2]
+        r4['text'] = answers_choice[indexes[ques]][3]
+        ques += 1
+        radiovar.set(radiovar_values[ques-1])
 
 # timer being made 
 def timer():
@@ -265,7 +302,6 @@ def timer():
     while t>=0 and o==0:
         mins, secs = divmod(t, 60) 
         ti= '{:02d}:{:02d}'.format(mins, secs) 
-        print(f'Time Left: {ti}', end="\r") 
         lbltime = Label(
             root,
             text = "Time Left: "+ti,
@@ -285,10 +321,15 @@ def timer():
         print('Time is up! No further answer shall be considered')
         save_results()
 
+def next_button():
+    global x,ques,v
+    v=1
+    x=-1
+    selected()
 
 # printing questions and options 
 def startquiz():
-    global lblQuestion,r1,r2,r3,r4,r5,lblRules,o,lblbutton
+    global lblQuestion,r1,r2,r3,r4,r5,lblRules,o,lblbutton,lblnext
     o=0
     if t>0:
         lblQuestion = Label(
@@ -300,11 +341,11 @@ def startquiz():
             wraplength = 400,
             background = "#ffffff",
         )
-        lblQuestion.pack(pady=(25,40))
+        lblQuestion.pack(pady=(15,10))
 
         global radiovar
         radiovar = IntVar()
-        radiovar.set(-1)
+        radiovar.set(-5)
 
         r1 = Radiobutton(
             root,
@@ -315,7 +356,7 @@ def startquiz():
             command = selected,
             background = "#ffffff",
         )
-        r1.pack(pady=5)
+        r1.pack()
 
         r2 = Radiobutton(
             root,
@@ -354,7 +395,7 @@ def startquiz():
             root,
             text = '**Skip this question**',
             font = ("Times", 12),
-            value = 4,
+            value = -1,
             variable = radiovar,
             command = selected,
             background = "#ffffff",
@@ -381,25 +422,79 @@ def startquiz():
             foreground = "#ffffff",
             command =save_results,
         )
-        lblbutton.pack()
-        
+        lblbutton.pack(side=LEFT,pady=40)
+        lblnext = Button(
+            root,
+            text = "NEXT",
+            font = ("Consolas",12),
+            relief = FLAT,
+            border = 10,
+            background="#3d3d5c",
+            foreground = "#ffffff",
+            command =next_button,
+        )
+        lblnext.pack(side=RIGHT,pady=40)
 
+def hotkeys():
+    global t,o,marked_ans,lblunatt,k,ques
+    k=0
+    while t>=0 and o==0:
+        # for knowing the unattempted question 
+        if keyboard.is_pressed(nav_unattempted_ques):
+            li=[]
+            for i in range(len(marked_ans)):
+                if marked_ans[i]==-1:
+                    li.append(i+1)
+            txt = "Unattempted Q: "
+            for i in li:
+                txt=txt+str(i)+", "
+            if  k==1:  
+                lblunatt.destroy()
+            lblunatt = Label(
+                root,
+                text = txt,
+                width = 100,
+                font = ("Consolas",12),
+                background = "#e6e6ff",
+                foreground = "#000000",
+            )
+            lblunatt.pack()
+            root.update()
+            k=1
+        
+        # submitting hotkeys
+        if keyboard.is_pressed(nav_submit):
+            y=input("Are you sure you want to submit? (Yes/No) ")
+            if y.lower()=="yes":
+                save_results()
+
+        # navigating any question by user 
+        if keyboard.is_pressed(nav_goto_ques):
+            b=input("The question you want to navigate to (Total questions are "+str(len(questions))+") : ")
+            if int(b)<=len(questions) and int(b)>0:
+                ques=int(b)-1
+                selected()
+            else:
+                print("INVALID")
+ 
+                  
 def startIspressed():
     labeltext.destroy()
     btnStart.destroy()
     make_list_of_q()
-    threading.Thread(target = timer).start()
     threading.Thread(target = startquiz).start() 
+    threading.Thread(target = timer).start()
+    threading.Thread(target = hotkeys).start()
 
 
 def quiz(r):
-    global n,root,labeltext,btnStart,roll,lblname,roll,name
+    global n,root,labeltext,btnStart,roll,lblname,roll,name,lblinstr
     roll=r
     n=input("Kindly input the quiz set you woulld like to attempt from 1-3:")
 
     root = tkinter.Tk()
     root.title(f"Quiz {n}")
-    root.geometry("700x600")
+    root.geometry("700x650")
     root.config(background="#ffffff")
     root.resizable(0,0)
 
@@ -433,6 +528,15 @@ def quiz(r):
         command =startIspressed,
     )
     btnStart.pack()
+
+    lblinstr = Label(
+        root,
+        text = "To see the unattempted questions: "+nav_unattempted_ques+"\nTo navigate between questions: "+nav_goto_ques+" (then type the question number)\nTo submit the quiz: "+nav_submit,
+        font = ("Comic sans MS",12),
+        background = "#ffffff",
+        foreground = "#000000",
+    )
+    lblinstr.pack()
     root.mainloop()
 
 print("Kindly login to attempt the Quiz")
