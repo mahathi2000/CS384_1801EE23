@@ -1,0 +1,11 @@
+ques_no,question,option1,option2,option3,option4,correct_option,marks_correct_ans,marks_wrong_ans,compulsory,time=10m
+1,Entomology is the science that studie,Behavior of human beings,Insects,The origin and history of technical and scientific terms,The formation of rocks,2,5,-1,y,
+2,The sun rises in the:,North-West,South,East,The sun never rises,3,0.5,-3,y,
+3,How many times a day does the sun rise,twice,once,365,The sun never rises,2,4,-1,n,
+4,Which is the largest Animal in the world,Shark,Blue Whale,Elephant,Giraffe,2,5,-1,y,
+5,9+0:,-1,-2,-3,9,4,5,-1,y,
+6,What is the 19th letter of the English alphabet,N,M,W,S,4,5,1,n,
+7,Which is smallest continent in the world?,Asia,Australia,Arctic,Africa,2,5,-1,y,
+8,Which metal is the lightest metal in world?,Zinc,Lithium,Platinum,Gold,2,5,-1,y,
+9,How many colours are there in a rainbow?,10,9,7,11,3,5,-2,y,
+10,How many players are there in a Cricket team?,10,9,6,11,4,5,-3,y,
