@@ -17,7 +17,8 @@ import os.path
 from datetime import datetime
 import pathlib
 
-
+# cwd=os.path.dirname(os.path.realpath(_file_))
+# os.chdir(cwd)
 os.system("cls")
 
 
@@ -256,8 +257,21 @@ def findcharcount():
     global TextArea,submenu7
     if TextArea.compare("end-1c", "!=", "1.0"):
         #submenu7.entryconfig(0,label=str(str(len(TextArea.get("1.0", 'end-1c'))+" Chars")))
-        #submenu7.entryconfig(0,label=str(str(len(TextArea.get(0.0, END))-1)+" Chars"))
-        submenu7.entryconfig(0,label=len(TextArea.get(1.0, "end-1c").replace(" ", "")))
+        submenu7.entryconfig(0,label=str(str(len(TextArea.get(0.0, END))-1)+" Chars"))
+
+        #submenu7.entryconfig(0,label=str(str((len(TextArea.get(0.0, END))-1)-((int(TextArea.index('end').split('.')[0]) - 1)-1)+" Chars"))
+
+
+
+
+
+
+        #submenu7.entryconfig(0,label=str(str(len(TextArea.get(0.0, END))-1-int(TextArea.index('end').split('.')[0]) - 1))+" Chars")
+
+        #char=len(TextArea.get(1.0, "end-1c")
+        #line=int(TextArea.index('end').split('.')[0]) - 1)
+        #submenu7.entryconfig(0,label=len(TextArea.get(1.0, "end-1c").replace(" ", "")))
+        #submenu7.entryconfig(0,label=char-(int(TextArea.index('end').split('.')[0]) - 1)-1))
     pass
 
 
