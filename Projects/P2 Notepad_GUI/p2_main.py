@@ -13,6 +13,7 @@ import pathlib
 
 os.system("cls")
 
+
 root=Tk()
 root.title("Untitled-Notepad")
 root.wm_iconbitmap("blue_icon.ico")
