@@ -313,23 +313,34 @@ def rename_How_I_Met_Your_Mother(folder_name):
     # rename Logic 
     pass
     
+print("Select the show you want to rename:")
+print("1.FIR")
+print("2.Game of Thrones")
+print("3.How I Met Your Mother")
+print("4.Sherlock")
+print("5.Suits")
 
 
 
-print("Enter Show name:")
+print("Type the Show Number:")
 show_name=input()
 
-if(show_name=='FIR'):
+if(show_name=='1'):
+    show_name='FIR'
     rename_FIR(show_name)
 
-if(show_name=='Game of Thrones'):
+if(show_name=='2'):
+    show_name='Game of Thrones'
     rename_Game_of_Thrones(show_name)
 
-if(show_name=='How I Met Your Mother'):
+if(show_name=='3'):
+    show_name='How I Met Your Mother'
     rename_How_I_Met_Your_Mother(show_name)
 
-if(show_name=='Sherlock'):
+if(show_name=='4'):
+    show_name='Sherlock'
     rename_Sherlock(show_name)
 
-if(show_name=='Suits'):
+if(show_name=='5'):
+    show_name='Suits'
     rename_Suits(show_name)
