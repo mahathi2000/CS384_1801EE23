@@ -16,6 +16,8 @@ import os
 import os.path 
 from datetime import datetime
 import pathlib
+from tkinter import font , colorchooser, filedialog, messagebox
+
 
 # cwd=os.path.dirname(os.path.realpath(_file_))
 # os.chdir(cwd)
@@ -69,48 +71,48 @@ def openFile():
     pass
 
 def saveFile():
-    global url
-    try:
-        if url :
-            content = str(text_editor.get(1.0,tk.END))
-            with open(url,'w',encoding= 'utf-8') as fw:
-                fw.write(content)
-        else :
-            url = filedialog.asksaveasfile(mode = 'w' ,defaultextension = '.txt',filetypes=(('Text File','*.txt'),('All files','*.*')))
-            content = text_editor.get(1.0,tk.END)
-            url.write(content)
-            url.close()
-    except :
-        return 
-
-
-
-
-
-
-
     # global file
-    # if file == None:
-    #     file = asksaveasfilename(initialfile = 'Untitled.txt', defaultextension=".txt",
-    #                        filetypes=[("All Files", "*.*"),
-    #                                  ("Text Documents", "*.txt")])
-    #     if file =="":
-    #         file = None
+    # try:
+    #     if file :
+    #         content = str(text_editor.get(1.0,tk.END))
+    #         with open(url,'w',encoding= 'utf-8') as fw:
+    #             fw.write(content)
+    #     else :
+    #         file = filedialog.asksaveasfile(mode = 'w' ,defaultextension = '.txt',filetypes=(('Text File','*.txt'),('All files','*.*')))
+    #         content = text_editor.get(1.0,tk.END)
+    #         file.write(content)
+    #         file.close()
+    # except :
+    #     return 
 
-    #     else:
-    #         #Save as a new file
-    #         f = open(file, "w")
-    #         f.write(TextArea.get(1.0, END))
-    #         f.close()
 
-    #         root.title(os.path.basename(file) + " - Notepad")
-    #         print("File Saved")
-    # else:
-    #     # Save the file
-    #     f = open(file, "w")
-    #     f.write(TextArea.get(1.0, END))
-    #     f.close()
-    # pass
+
+
+
+
+
+    global file
+    if file == None:
+        file = asksaveasfilename(initialfile = 'Untitled.txt', defaultextension=".txt",
+                           filetypes=[("All Files", "*.*"),
+                                     ("Text Documents", "*.txt")])
+        if file =="":
+            file = None
+
+        else:
+            #Save as a new file
+            f = open(file, "w")
+            f.write(TextArea.get(1.0, END))
+            f.close()
+
+            root.title(os.path.basename(file) + " - Notepad")
+            print("File Saved")
+    else:
+        # Save the file
+        f = open(file, "w")
+        f.write(TextArea.get(1.0, END))
+        f.close()
+    pass
 
 
 def saveAs():
@@ -122,7 +124,8 @@ def saveAs():
         file=open(filvar,"w")
         file.write(TextArea.get(1.0,END))
         file.close()
-        showinfo("Successfully saved", str("Saved as "+filvar+" successfully!"))
+        
+        #showinfo("Successfully saved", str("Saved as "+filvar+" successfully!"))
     pass
     
 
@@ -316,12 +319,49 @@ def findmodifiedtime():
 
     pass
 
+current_font_family='lucida'
+current_font_size=13
+
+def change_font(event=None):
+    global current_font_family
+    current_font_family = font_family.get()
+    text_editor.config(font=(current_font_family,current_font_size))
+    pass
 
 
+def change_size(event=None):
+    global current_font_size
+    current_font_size = size_var.get()
+    text_editor.config(font=(current_font_family,current_font_size))
+    pass
 
 
+def change_bold():
+    text_property=tk.font.Font(font=TextArea['font'])
+##upper line gives a dictionary whose attributes we are changing
+    if text_property.actual()['weight']=='normal' :
+        TextArea.configure(font=(current_font_family,current_font_size,'bold'))
+    if text_property.actual()['weight']=='bold' :
+        TextArea.configure(font=(current_font_family,current_font_size,'normal'))
+    pass
 
+def change_italic():
+    text_property=tk.font.Font(font=TextArea['font'])
+##upper line gives a dictionary whose attributes we are changing
+    if text_property.actual()['slant']=='roman' :
+        TextArea.configure(font=(current_font_family,current_font_size,'italic'))
+    if text_property.actual()['slant']=='italic' :
+        TextArea.configure(font=(current_font_family,current_font_size,'normal'))
+    pass
 
+def underline():
+    text_property=tk.font.Font(font=TextArea['font'])
+##upper line gives a dictionary whose attributes we are changing
+    if text_property.actual()['underline']==0 :
+        TextArea.configure(font=(current_font_family,current_font_size,'underline'))
+    if text_property.actual()['underline']==1 :
+        TextArea.configure(font=(current_font_family,current_font_size,'normal'))
+    pass
 
 
 
@@ -434,6 +474,20 @@ MenuBar.add_cascade(label="Help",menu=HelpMenu)
 
 #Help menu Ends
 
+
+# #new functionalities here
+
+FontMenu=Menu(MenuBar,tearoff=0)
+FontMenu.add_command(label="Bold", command=change_bold)
+FontMenu.add_command(label="Italic", command=change_italic)
+FontMenu.add_command(label="Underline", command=underline)
+
+MenuBar.add_cascade(label="Font",menu=FontMenu)
+
+#new ends
+
+
+
 root.config(menu=MenuBar)
 
 #Adding Scroll Bar
@@ -442,6 +496,8 @@ Scroll=Scrollbar(TextArea)
 Scroll.pack(side=RIGHT, fill=Y)
 Scroll.config(command=TextArea.yview)
 TextArea.config(yscrollcommand=Scroll.set)
+
+
 
 
 
