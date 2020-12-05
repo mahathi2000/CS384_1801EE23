@@ -21,6 +21,9 @@ import pathlib
 # os.chdir(cwd)
 os.system("cls")
 
+cwd=os.path.dirname(os.path.realpath(__file__))
+os.chdir(cwd)
+
 
 root=Tk()
 root.title("Untitled-Notepad")
@@ -124,6 +127,7 @@ def saveAs():
     
 
 def quitApp():
+
     root.destroy()
 
     pass
